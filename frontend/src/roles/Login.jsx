@@ -12,6 +12,7 @@ const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
 
     const Login = async (e) => {
         e.preventDefault();
@@ -19,7 +20,7 @@ const Login = () => {
         
         try {
             const data = { email, password };
-            const res = await axios.post("http://localhost:3000/api/login", data);
+            const res = await axios.post(`${API_URL}/api/login`, data);
             
             console.log(res.data);
             

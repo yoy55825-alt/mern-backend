@@ -7,10 +7,11 @@ import { UserContext } from "../context/userContext";
 const Logout = () => {
     const { dispatch } = useContext(UserContext);
     const navigate = useNavigate();
+    const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
 
     const handleLogout = async () => {
         try {
-            await axios.post('http://localhost:3000/api/logout');
+            await axios.post(`${API_URL}/api/logout`);
             dispatch({ type: "LOGOUT" });
             navigate('/login');
         } catch (error) {
