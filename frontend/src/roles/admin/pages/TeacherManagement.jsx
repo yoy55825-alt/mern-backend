@@ -5,9 +5,11 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router";
 function TeacherManagement() {
     const [data, setData] = useState([])
+    const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
+
     //get teachers' data
     const getTeachers = async () => {
-        const res = await axios.get('http://localhost:3000/api/index')
+        const res = await axios.get(`${API_URL}/api/index`)
         const users = res.data
 
         const teacherData = users.filter(user => user.role == 'teacher')
@@ -17,7 +19,7 @@ function TeacherManagement() {
     }
     // delete teachers data 
     const deleteTeacher = async (id) => {
-        let res = await axios.delete("http://localhost:3000/api/user/delete/" + id)
+        let res = await axios.delete(`${API_URL}/api/user/delete/` + id)
         if (res.status == 200) {
             setData(prevData => prevData.filter(teacher => teacher._id !== id))
         }
@@ -55,10 +57,10 @@ function TeacherManagement() {
                             <span>{teacher.teacherProfile.coursesTeaching.join(', ')}</span>
 
                             <div className="action-buttons">
-                                <Link to={'/admin/teacherUpdate/'+teacher._id} className="edit-btn">
+                                <Link to={'/admin/teacherUpdate/' + teacher._id} className="edit-btn">
                                     <FaEdit />
                                 </Link>
-                                <button onClick={()=>deleteTeacher(teacher._id)} className="delete-btn">
+                                <button onClick={() => deleteTeacher(teacher._id)} className="delete-btn">
                                     <FaTrash />
                                 </button>
                             </div>

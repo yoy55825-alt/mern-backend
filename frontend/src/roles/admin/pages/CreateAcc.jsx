@@ -6,6 +6,7 @@ import { UserContext } from '../../../context/userContext'
 import './CreateAcc.css'
 import { useParams } from 'react-router'
 const CreateAcc = () => {
+    const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
     let { dispatch } = useContext(UserContext)
     const navigate = useNavigate()
     const [role, setRole] = useState("admin")
@@ -24,7 +25,7 @@ const CreateAcc = () => {
 
     //get user information
     const fetchData = async () => {
-        const res = await axios.get("http://localhost:3000/api/user/detail/" + id)
+        const res = await axios.get(`${API_URL}/api/user/detail/` + id)
         if (res.status == 200) {
             const user = res.data
             setIsEditing(true)
@@ -89,12 +90,12 @@ const CreateAcc = () => {
             let res;
             if (isEditing) {
                 // Update existing user
-                res = await axios.patch(`http://localhost:3000/api/user/update/${id}`, data, {
+                res = await axios.patch(`${API_URL}/api/user/update/${id}`, data, {
                     withCredentials: true
                 })
             } else {
                 // Create new user
-                res = await axios.post("http://localhost:3000/api/register", data, {
+                res = await axios.post(`${API_URL}/api/register`, data, {
                     withCredentials: true
                 })
             }

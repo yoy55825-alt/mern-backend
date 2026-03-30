@@ -13,10 +13,11 @@ const Dashboard = () => {
     totalTeachers: 0,
     totalUsers: 0
   })
+  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
   
   const getCount = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/api/index")
+      const res = await axios.get(`${API_URL}/api/index`)
       const users = res.data
       
       // Count students and teachers based on role

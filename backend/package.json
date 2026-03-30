@@ -17,6 +17,7 @@
     "xlsx": "^0.18.5"
   },
   "scripts": {
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "start": "node server.js"
   }
 }

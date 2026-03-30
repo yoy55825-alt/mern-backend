@@ -6,10 +6,11 @@ import { Link } from "react-router";
 import { useNavigate } from "react-router";
 function StudentManagement() {
   const [data,setData]=useState([])
+  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
   const navigate=useNavigate()
   // get student data 
   const getStudents=async()=>{
-    let res=await axios.get("http://localhost:3000/api/index")
+    let res=await axios.get(`${API_URL}/api/index`)
     console.log(res.data);
     const users=res.data
     const studentData=users.filter(user=>user.role=='student')
@@ -20,7 +21,7 @@ function StudentManagement() {
 
   // delete student data 
   const deleteStudent =async(id)=>{
-    let res=await axios.delete("http://localhost:3000/api/user/delete/"+id)
+    let res=await axios.delete(`${API_URL}/api/user/delete/`+id)
     if(res.status==200){
         setData(prevData => prevData.filter(student => student._id !== id))
     }

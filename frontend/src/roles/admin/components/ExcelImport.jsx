@@ -4,6 +4,7 @@ import axios from 'axios';
 import * as XLSX from 'xlsx'; // For preview functionality
 
 const ExcelImport = () => {
+  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
@@ -61,7 +62,7 @@ const ExcelImport = () => {
 
     try {
       const response = await axios.post(
-        'http://localhost:3000/api/excelUsers/bulk-import-excel',
+        `${API_URL}/api/excelUsers/bulk-import-excel`,
         formData,
         {
           withCredentials: true,
