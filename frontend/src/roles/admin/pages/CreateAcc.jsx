@@ -6,7 +6,7 @@ import { UserContext } from '../../../context/userContext'
 import './CreateAcc.css'
 import { useParams } from 'react-router'
 const CreateAcc = () => {
-    const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
     let { dispatch } = useContext(UserContext)
     const navigate = useNavigate()
     const [role, setRole] = useState("admin")

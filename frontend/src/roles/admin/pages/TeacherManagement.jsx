@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router";
 function TeacherManagement() {
     const [data, setData] = useState([])
-    const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
     //get teachers' data
     const getTeachers = async () => {

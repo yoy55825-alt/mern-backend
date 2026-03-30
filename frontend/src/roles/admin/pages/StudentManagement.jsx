@@ -6,7 +6,7 @@ import { Link } from "react-router";
 import { useNavigate } from "react-router";
 function StudentManagement() {
   const [data,setData]=useState([])
-  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
   const navigate=useNavigate()
   // get student data 
   const getStudents=async()=>{
