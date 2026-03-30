@@ -348,7 +348,7 @@ const OnlineSubmit = () => {
             <div className="submission-footer">
                 <div className="progress-summary">
                     <span>Answered: {Object.values(answers).filter(a => a !== null).length}/{assignment.questions?.length}</span>
-                    <span>Time remaining: {formatTime(Math.max(0, (new Date(assignment.deadLine) - new Date()) / 1000))}</span>
+                    {/* <span>Time remaining: {formatTime(Math.max(0, (new Date(assignment.deadLine) - new Date()) / 1000))}</span> */}
                 </div>
 
                 <button
