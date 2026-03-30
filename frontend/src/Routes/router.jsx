@@ -19,7 +19,7 @@ import FileSubmit from '../roles/student/component/FileSubmit.jsx';
 import OnlineSubmit from '../roles/student/component/OnlineSubmit.jsx';
 import OnlineMC from '../roles/student/component/OnlineMC.jsx';
 import OnlineFb from '../roles/student/component/OnlineFb.jsx';
-import SubmissionList from '../roles/teacher/pages/submissionList.jsx';
+import SubmissionList from '../roles/teacher/pages/SubmissionList.jsx';
 import GradeSubmission from '../roles/teacher/pages/GradeSubmission.jsx';
 
 const Router = () => {
