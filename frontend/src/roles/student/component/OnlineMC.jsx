@@ -18,6 +18,7 @@ const OnlineSubmit = () => {
     const [timeSpent, setTimeSpent] = useState(0);
     const [submitted, setSubmitted] = useState(false);
     const [submissionResult, setSubmissionResult] = useState(null);
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
     // Fetch assignment data
     useEffect(() => {
@@ -39,7 +40,7 @@ const OnlineSubmit = () => {
     const fetchAssignment = async () => {
         try {
             setLoading(true);
-            const response = await axios.get(`http://localhost:3000/api/student/assignment/detail/${assignmentId}`);
+            const response = await axios.get(`${API_URL}/api/student/assignment/detail/${assignmentId}`);
             setAssignment(response?.data.data || []);
 
             // Initialize answers object
@@ -89,7 +90,7 @@ const OnlineSubmit = () => {
                 answer: answers[questionId]
             }));
 
-            const response = await axios.post(`http://localhost:3000/api/student/submission/online/${assignmentId}`, {
+            const response = await axios.post(`${API_URL}/api/student/submission/online/${assignmentId}`, {
                 answers: answersArray,
                 timeSpent,
                 studentId: user.id

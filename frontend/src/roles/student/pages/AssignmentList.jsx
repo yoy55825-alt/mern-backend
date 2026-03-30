@@ -12,6 +12,7 @@ const AssignmentList = () => {
   const [loading, setLoading] = useState(true);
   const [submissionsMap, setSubmissionsMap] = useState({}); // Store submission status for each assignment
   const navigate = useNavigate();
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
   // Get user from context
   const { user } = useContext(UserContext);
@@ -39,7 +40,7 @@ const AssignmentList = () => {
   const fetchAssignments = async () => {
     try {
       setLoading(true);
-      const response = await axios.get("http://localhost:3000/api/student/assignment/fetchAll");
+      const response = await axios.get(`${API_URL}/api/student/assignment/fetchAll`);
       setAssignments(response.data.data || []);
     } catch (error) {
       console.error('Error fetching assignments:', error);
@@ -52,7 +53,7 @@ const AssignmentList = () => {
   const fetchUserSubmissions = async () => {
     try {
       const submissionsPromises = filteredAssignments.map(assignment =>
-        axios.get(`http://localhost:3000/api/student/submission/fetchSingle/${assignment._id}`, {
+        axios.get(`${API_URL}/api/student/submission/fetchSingle/${assignment._id}`, {
           params: { studentId: user.id } // or user.id depending on your schema
         }).catch(error => {
           // If no submission found, return null

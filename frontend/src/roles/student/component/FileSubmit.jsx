@@ -7,7 +7,7 @@ import './FileSubmit.css';
 const FileUpload = () => {
     const { assignmentId } = useParams();
     console.log(assignmentId);
-
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
     const navigate = useNavigate();
     const { user } = useContext(UserContext);
 
@@ -30,7 +30,7 @@ const FileUpload = () => {
     const fetchAssignmentDetails = async () => {
         try {
             setLoading(true);
-            const response = await axios.get(`http://localhost:3000/api/student/assignment/detail/${assignmentId}`);
+            const response = await axios.get(`${API_URL}/api/student/assignment/detail/${assignmentId}`);
             setAssignment(response?.data.data || []);
             console.log(response);
 
@@ -134,7 +134,7 @@ const FileUpload = () => {
 
         try {
             const response = await axios.post(
-                `http://localhost:3000/api/student/assignment/fileUpload/${assignmentId}`,
+                `${API_URL}/api/student/assignment/fileUpload/${assignmentId}`,
                 formData,
                 {
                     headers: {
