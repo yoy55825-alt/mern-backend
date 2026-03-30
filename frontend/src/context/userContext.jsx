@@ -6,6 +6,7 @@ const UserContext = createContext();
 
 // Configure axios defaults
 axios.defaults.withCredentials = true; // This sends cookies with every request
+const API_URL = process.env.VITE_API_URL || 'http://localhost:3000';
 
 let AuthenticationReducer = (state, action) => {
     switch (action.type) {
@@ -39,7 +40,7 @@ const UserContextProvider = ({ children }) => {
         const verifyAuth = async () => {
             try {
                 // This will use the HTTP-only cookie automatically
-                const response = await axios.get('http://localhost:3000/api/me');
+                const response = await axios.get(`${API_URL}/api/me`);
                 
                 if (response.data.user) {
                     dispatch({ type: "SIGNIN", payload: response.data.user });
