@@ -10,6 +10,8 @@ const AssignmentsList = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [assignmentToDelete, setAssignmentToDelete] = useState(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+
 
   useEffect(() => {
     fetchAssignments();
@@ -18,7 +20,7 @@ const AssignmentsList = () => {
   const fetchAssignments = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('http://localhost:3000/api/teacher/assignment/fetchAll');
+      const response = await axios.get(`${API_URL}/api/teacher/assignment/fetchAll`);
       setAssignments(response.data.data || []);
     } catch (error) {
       console.error('Error fetching assignments:', error);
@@ -44,7 +46,7 @@ const AssignmentsList = () => {
     
     setDeleteLoading(true);
     try {
-      await axios.delete(`http://localhost:3000/api/teacher/assignment/delete/${assignmentToDelete._id}`);
+      await axios.delete(`${API_URL}/api/teacher/assignment/delete/${assignmentToDelete._id}`);
       setAssignments(assignments.filter(assignment => assignment._id !== assignmentToDelete._id));
       closeDeleteModal();
     } catch (error) {

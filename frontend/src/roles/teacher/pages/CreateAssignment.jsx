@@ -33,10 +33,12 @@ const Dashboard = () => {
   const [users, setUsers] = useState([]);
   const [selectedDepartment, setSelectedDepartment] = useState('');
   let { id } = useParams();
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+
 
   // get Assignment detail 
   const fetchData = async () => {
-    const res = await axios.get("http://localhost:3000/api/teacher/assignment/detail/" + id);
+    const res = await axios.get(`${API_URL}/api/teacher/assignment/detail/` + id);
     if (res.status == 200) {
       const data = res.data
       setIsEditing(true)
@@ -87,13 +89,13 @@ const Dashboard = () => {
       }
       let res;
       if (isEditing) {
-        res = await axios.patch("http://localhost:3000/api/teacher/assignment/update/" + id,
+        res = await axios.patch(`${API_URL}/api/teacher/assignment/update/` + id,
           formData,
           { headers: { "Content-Type": "multipart/form-data" } }
         )
       } else {
         res = await axios.post(
-          "http://localhost:3000/api/teacher/assignment/create",
+          `${API_URL}/api/teacher/assignment/create`,
           formData,
           { headers: { "Content-Type": "multipart/form-data" } }
         )
@@ -162,7 +164,7 @@ const Dashboard = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/api/index');
+      const response = await axios.get(`${API_URL}/api/index`);
       setUsers(response.data.users || response.data || []);
     } catch (error) {
       console.error('Error fetching users:', error);

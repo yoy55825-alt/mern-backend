@@ -11,6 +11,7 @@ const SubmissionList = () => {
   const [selectedSubmission, setSelectedSubmission] = useState(null);
   const [filterType, setFilterType] = useState('all');
   const [filterStatus, setFilterStatus] = useState('all');
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
   useEffect(() => {
     fetchSubmissions();
@@ -19,7 +20,7 @@ const SubmissionList = () => {
   const fetchSubmissions = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('http://localhost:3000/api/student/submission/fetchAll');
+      const response = await axios.get(`${API_URL}/api/student/submission/fetchAll`);
       setSubmissions(response.data.data || []);
     } catch (error) {
       console.error('Error fetching submissions:', error);

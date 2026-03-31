@@ -10,6 +10,7 @@ const GradeFileSubmission = () => {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
   const [gradeData, setGradeData] = useState({
     score: 0,
     maxScore: 0,
@@ -26,12 +27,12 @@ const GradeFileSubmission = () => {
     try {
       setLoading(true);
       // Fetch submission details
-      const submissionResponse = await axios.get(`http://localhost:3000/api/student/submission/fetch/subId/${submissionId}`);
+      const submissionResponse = await axios.get(`${API_URL}/api/student/submission/fetch/subId/${submissionId}`);
       const submissionData = submissionResponse?.data?.submission[0] || [];
       setSubmission(submissionData);
       console.log(submission);
       // Fetch assignment details to get max score
-      const assignmentResponse = await axios.get(`http://localhost:3000/api/teacher/assignment/detail/${submissionData.assignmentId}`);
+      const assignmentResponse = await axios.get(`${API_URL}/api/teacher/assignment/detail/${submissionData.assignmentId}`);
       const assignmentData = assignmentResponse?.data || [];
       console.log(assignmentResponse);
 
@@ -91,7 +92,7 @@ const GradeFileSubmission = () => {
         gradedAt: new Date().toISOString()
       };
 
-      await axios.patch(`http://localhost:3000/api/student/submission/grade/${submissionId}`, gradePayload);
+      await axios.patch(`${API_URL}/api/student/submission/grade/${submissionId}`, gradePayload);
 
       // Show success and redirect
       navigate('/teacher/submissions', {

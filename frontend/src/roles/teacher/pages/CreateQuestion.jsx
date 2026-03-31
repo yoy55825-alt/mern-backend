@@ -8,6 +8,7 @@ const AssignmentForm = () => {
   const [users, setUsers] = useState([]);
   const [selectedDepartment, setSelectedDepartment] = useState('');
   const [error, setError] = useState({});
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
   // Form state
   const [formData, setFormData] = useState({
@@ -95,7 +96,7 @@ const AssignmentForm = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/api/index');
+      const response = await axios.get(`${API_URL}/api/index`);
       setUsers(response.data.users || response.data || []);
     } catch (error) {
       console.error('Error fetching users:', error);
@@ -332,7 +333,7 @@ const AssignmentForm = () => {
       }
 
       const res = await axios.post(
-        'http://localhost:3000/api/teacher/assignment/create',
+        `${API_URL}/api/teacher/assignment/create`,
         submitData,
         { headers: { 'Content-Type': 'multipart/form-data' } }
       );

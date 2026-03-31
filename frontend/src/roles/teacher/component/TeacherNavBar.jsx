@@ -15,9 +15,10 @@ import axios from 'axios';
 const AdminDashboard = () => {
   const {dispatch}=useContext(UserContext)
   const navigate=useNavigate()
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
   const handleLogout=async()=>{
     try{
-      await axios.post('http://localhost:3000/api/user/logout')
+      await axios.post(`${API_URL}/api/user/logout`)
       dispatch({type:"LOGOUT"})
       navigate('/')
     }catch(e){
