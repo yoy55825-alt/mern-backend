@@ -30,7 +30,7 @@ const SubmissionList = () => {
         // Fetch all assignments
         const assignmentsRes = await axios.get(`${API_URL}/api/assignment/fetchAll`);
         const assignmentsMap = {};
-        assignmentsRes.data.forEach(assignment => {
+        assignmentsRes.data.data.forEach(assignment => {
           assignmentsMap[assignment._id] = assignment.title;
         });
         setAssignments(assignmentsMap);
