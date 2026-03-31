@@ -12,7 +12,36 @@ const SubmissionList = () => {
   const [filterType, setFilterType] = useState('all');
   const [filterStatus, setFilterStatus] = useState('all');
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+  const [students, setStudents] = useState({});
+  const [assignments, setAssignments] = useState({});
 
+  // Fetch students and assignments separately
+  useEffect(() => {
+    const fetchReferenceData = async () => {
+      try {
+        // Fetch all students
+        const studentsRes = await axios.get(`${API_URL}/api/index`);
+        const studentsMap = {};
+        studentsRes.data.forEach(student => {
+          studentsMap[student._id] = student.name;
+        });
+        setStudents(studentsMap);
+
+        // Fetch all assignments
+        const assignmentsRes = await axios.get(`${API_URL}/api/assignment/fetchAll`);
+        const assignmentsMap = {};
+        assignmentsRes.data.forEach(assignment => {
+          assignmentsMap[assignment._id] = assignment.title;
+        });
+        setAssignments(assignmentsMap);
+      } catch (error) {
+        console.error('Error fetching reference data:', error);
+      }
+    };
+
+    fetchReferenceData();
+  }, []);
+  //use effect for fetch submissions
   useEffect(() => {
     fetchSubmissions();
   }, []);
@@ -31,7 +60,7 @@ const SubmissionList = () => {
   };
 
   const getSubmissionTypeIcon = (type) => {
-    switch(type) {
+    switch (type) {
       case 'online':
         return <i className="fas fa-laptop-code"></i>;
       case 'file':
@@ -76,7 +105,7 @@ const SubmissionList = () => {
   };
 
   const getSubmissionDetails = (submission) => {
-    switch(submission.submissionType) {
+    switch (submission.submissionType) {
       case 'online':
         return (
           <div className="details-list">
@@ -90,7 +119,7 @@ const SubmissionList = () => {
             </div>
           </div>
         );
-      
+
       case 'file':
         return (
           <div className="details-list">
@@ -106,7 +135,7 @@ const SubmissionList = () => {
             )}
           </div>
         );
-      
+
       case 'paper':
         return (
           <div className="details-list">
@@ -122,7 +151,7 @@ const SubmissionList = () => {
             )}
           </div>
         );
-      
+
       default:
         return null;
     }
@@ -138,8 +167,8 @@ const SubmissionList = () => {
   const formatDate = (dateString) => {
     if (!dateString) return '—';
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { 
-      month: 'short', 
+    return date.toLocaleDateString('en-US', {
+      month: 'short',
       day: 'numeric',
       hour: '2-digit',
       minute: '2-digit'
@@ -155,7 +184,7 @@ const SubmissionList = () => {
       navigate(`/teacher/submission/grade/file/${submission._id}`);
     } else if (submission.submissionType === 'paper') {
       navigate(`/teacher/grade/paper/${submission._id}`);
-    }   
+    }
   };
 
   const filteredSubmissions = submissions.filter(submission => {
@@ -311,15 +340,15 @@ const SubmissionList = () => {
                   </div>
                   {getStatusBadge(submission)}
                 </div>
-                
+
                 <div className="card-body">
                   <div className="info-row">
                     <span className="info-label">Assignment ID</span>
-                    <span className="info-value">{submission.assignmentId}</span>
+                    <span className="info-value">{assignments[submission.assignmentId] || submission.assignmentId}</span>
                   </div>
                   <div className="info-row">
                     <span className="info-label">Student ID</span>
-                    <span className="info-value">{submission.studentId}</span>
+                    <span className="info-value">{students[submission.studentId] || submission.studentId}</span>
                   </div>
                   <div className="info-row">
                     <span className="info-label">Submitted</span>
@@ -334,7 +363,7 @@ const SubmissionList = () => {
                     <div className="info-value details">{getSubmissionDetails(submission)}</div>
                   </div>
                 </div>
-                
+
                 <div className="card-footer">
                   <button className="btn-outline" onClick={() => handleViewDetails(submission)}>
                     <i className="fas fa-eye"></i>
