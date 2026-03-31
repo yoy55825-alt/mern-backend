@@ -12,8 +12,8 @@ const SubmissionList = () => {
   const [filterType, setFilterType] = useState('all');
   const [filterStatus, setFilterStatus] = useState('all');
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
-  const [students, setStudents] = useState({});
-  const [assignments, setAssignments] = useState({});
+  const [students, setStudents] = useState([]);
+  const [assignments, setAssignments] = useState([]);
 
   // Fetch students and assignments separately
   useEffect(() => {
