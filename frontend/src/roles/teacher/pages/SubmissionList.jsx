@@ -344,7 +344,7 @@ const SubmissionList = () => {
                 <div className="card-body">
                   <div className="info-row">
                     <span className="info-label">Assignment ID</span>
-                    <span className="info-value">{assignments[String(submission.assignmentId)] || submission.assignmentId}</span>
+                    <span className="info-value">{assignments[String(submission.assignmentId)] || "undefined id"}</span>
                   </div>
                   <div className="info-row">
                     <span className="info-label">Student ID</span>
