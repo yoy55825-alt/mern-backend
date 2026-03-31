@@ -2,7 +2,7 @@
 import express from 'express';
 import multer from 'multer';
 import xlsx from 'xlsx';
-import bcrypt from 'bcryptjs'; // ✅ Added bcrypt import
+import bcrypt from 'bcrypt'; // ✅ Added bcrypt import
 import User from '../models/Users.js';
 
 const router = express.Router();
