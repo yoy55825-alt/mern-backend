@@ -208,7 +208,7 @@ const OnlineSubmit = () => {
             </div>
             
             <div className="action-buttons">
-              <button onClick={() => navigate('/student/dashboard')} className="btn-secondary">
+              <button onClick={() => navigate('/student/assignmentList')} className="btn-secondary">
                 Back to Dashboard
               </button>
               <button onClick={() => window.location.reload()} className="btn-primary">

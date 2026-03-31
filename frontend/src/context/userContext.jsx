@@ -6,7 +6,7 @@ const UserContext = createContext();
 
 // Configure axios defaults
 axios.defaults.withCredentials = true; // This sends cookies with every request
-const API_URL = process.env.VITE_API_URL || 'http://localhost:3000';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 let AuthenticationReducer = (state, action) => {
     switch (action.type) {

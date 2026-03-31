@@ -107,17 +107,22 @@ router.post('/bulk-import-excel', upload.single('file'), async (req, res) => {
           continue;
         }
 
+        // Hash password
+        const salt = bcrypt.genSaltSync();
+        const hash = bcrypt.hashSync(password, salt);
+
         // Prepare user data based on your existing structure
         const userData = {
           name: name.trim(),
           email: email,
-          role: role
+          role: role,
+          password : hash
         };
 
         // Add password if provided
-        if (password.trim() !== '') {
-          userData.password = password.trim();
-        }
+        // if (password.trim() !== '') {
+        //   userData.password = password.trim();
+        // }
 
         // Handle student profile
         if (role === 'student') {
