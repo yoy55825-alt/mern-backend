@@ -4,6 +4,7 @@ import Footer from "./Footer";
 import { FaChalkboardTeacher, FaUserGraduate, FaLock, FaBell, FaLaptop } from "react-icons/fa";
 import { useNavigate } from "react-router";
 import { Link } from "react-router";
+import { Outlet } from "react-router";
 function Home() {
     const supervisor = {
     name: "Tr Cho Mi Mi Maung",

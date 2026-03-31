@@ -29,19 +29,12 @@ const Router = () => {
 
 
   const router = createBrowserRouter([
-    {
-      path: '/',
-      element: <Home />,
+    
+      {path: '/',
+      element: user ? <App /> : <Home />,},
 
-      children: [
-        {
-          index: true,
-          element: user ? <App /> : <Login />,
-        },
-        {
-          path: 'login',
-          element: <Login />,
-        },
+      {path : '/login',
+      element : <Login/>,},
         {
           path: 'admin',
           element: <RequiredRole allowedRole={['admin']} />,
@@ -101,8 +94,8 @@ const Router = () => {
               element: <OnlineMC />
             },
             {
-              path: 'online/fillBlank/:assignmentId',
-              element: <OnlineFb />
+              path : 'online/fillBlank/:assignmentId',
+              element : <OnlineFb/>
             }
 
           ]
@@ -128,12 +121,12 @@ const Router = () => {
               element: <CreateQuestion />
             },
             {
-              path: 'submissions',
-              element: <SubmissionList />
+              path : 'submissions',
+              element : <SubmissionList/>
             },
             {
-              path: 'submission/grade/file/:submissionId',
-              element: <GradeSubmission />
+              path : 'submission/grade/file/:submissionId',
+              element : <GradeSubmission/>
             },
           ]
         },
@@ -141,8 +134,8 @@ const Router = () => {
           path: 'unauthorized',
           element: <Unauthorized />
         },
-      ]
-    }
+      
+    
   ]);
 
   return <RouterProvider router={router} />;
