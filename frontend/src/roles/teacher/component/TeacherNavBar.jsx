@@ -5,67 +5,65 @@ import {
   FaChalkboardTeacher,
   FaBook,
   FaChartBar,
-  FaFileExcel 
+  FaFileExcel
 } from "react-icons/fa";
 import { useContext } from 'react';
-import {UserContext} from "../../../context/userContext"
+import { UserContext } from "../../../context/userContext"
 import { useNavigate } from 'react-router';
 import axios from 'axios';
 
 const AdminDashboard = () => {
-  const {dispatch}=useContext(UserContext)
-  const navigate=useNavigate()
+  const { dispatch } = useContext(UserContext)
+  const navigate = useNavigate()
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
-  const handleLogout=async()=>{
-    try{
+  const handleLogout = async () => {
+    try {
       await axios.post(`${API_URL}/api/user/logout`)
-      dispatch({type:"LOGOUT"})
+      dispatch({ type: "LOGOUT" })
       navigate('/')
-    }catch(e){
-      console.log("logout failed",e)
+    } catch (e) {
+      console.log("logout failed", e)
     }
-    
+
   }
+  React.useEffect(() => {
+    if (open) {
+      document.body.classList.add('menu-open');
+      document.querySelector('.navbar').classList.add('menu-open');
+    } else {
+      document.body.classList.remove('menu-open');
+      document.querySelector('.navbar')?.classList.remove('menu-open');
+    }
+  }, [open]);
   return (
-    <div className="admin-container">
-      {/* HEADER */}
-      <div className="admin-header">
-        <h2>OAS(smart learning and assignment system)</h2>
-        <button onClick={handleLogout} className="logout-btn">Logout</button>
+    <nav className="navbar">
+       {/* LEFT SIDE */}
+      <div className="nav-left">
+        <div className="logo">
+          <img src="/webicon7.png" alt="logo" />
+          <h1>TaskWave</h1>
+        </div>
       </div>
 
       {/* NAVBAR */}
-      <div className="admin-navbar">
-        <ul>
-          <li>
-            <Link to={'/teacher/assignmentList'}>
-              <FaUserGraduate /> Assignment list
-            </Link>
-          </li>
-          <li>
-            <Link to={'/teacher/assignment/questionType'}>
-              <FaChalkboardTeacher /> Create Assignment
-            </Link>
-          </li>
-          <li>
-            <Link to={'/teacher/submissions'}>
-              <FaChartBar /> submissions
-            </Link>
-          </li>
-          {/* <li>
-            <a href="">
-              <FaBook /> Assignment Management
-            </a>
-          </li>
-          
-          <li>
-            <Link to={'/admin/excelImport'}>
-              <FaFileExcel />Excel spreadsheet
-            </Link>
-          </li> */}
-        </ul>
+      <div className={`nav-right ${open ? "active" : ""}`}>
+        <Link to={'/teacher/assignmentList'}>
+          <FaUserGraduate /> Assignment list
+        </Link>
+        <Link to={'/teacher/assignment/questionType'}>
+          <FaChalkboardTeacher /> Create Assignment
+        </Link>
+        <Link to={'/teacher/submissions'}>
+          <FaChartBar /> submissions
+        </Link>
+        <button onClick={handleLogout} className="logout-btn">
+          <FaSignOutAlt /> Logout
+        </button>
       </div>
-    </div>
+      <div className="menu-icon" onClick={() => setOpen(!open)}>
+        <FaBars />
+      </div>
+    </nav>
   );
 };
 
