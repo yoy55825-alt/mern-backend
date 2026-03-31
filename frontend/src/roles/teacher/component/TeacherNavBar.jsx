@@ -7,7 +7,8 @@ import {
   FaChartBar,
   FaFileExcel
 } from "react-icons/fa";
-import { useContext } from 'react';
+import React from 'react';
+import { useContext, useState } from 'react';
 import { UserContext } from "../../../context/userContext"
 import { useNavigate } from 'react-router';
 import axios from 'axios';
@@ -15,6 +16,7 @@ import axios from 'axios';
 const AdminDashboard = () => {
   const { dispatch } = useContext(UserContext)
   const navigate = useNavigate()
+  const [open, setOpen] = useState(false);
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
   const handleLogout = async () => {
     try {
@@ -37,7 +39,7 @@ const AdminDashboard = () => {
   }, [open]);
   return (
     <nav className="navbar">
-       {/* LEFT SIDE */}
+      {/* LEFT SIDE */}
       <div className="nav-left">
         <div className="logo">
           <img src="/webicon7.png" alt="logo" />
