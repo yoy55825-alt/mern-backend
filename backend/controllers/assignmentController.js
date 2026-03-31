@@ -21,7 +21,7 @@ const assignmentController = {
             // console.log("Matched:", result.matchedCount);
             // console.log("Modified:", result.modifiedCount);
 
-            const data = await Assignment.find().sort({ createdAt: -1 });
+            const data = await Assignment.find().sort({ createdAt: 1 });
 
             return res.status(200).json({
                 data,
