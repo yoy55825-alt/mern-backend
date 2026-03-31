@@ -56,7 +56,7 @@ function Home() {
           <h1>TaskWave</h1>
         </div>
         <Link to={'/login'}>
-          <button className="login-btn">Login</button>
+          Login
         </Link>
       </nav>
 
