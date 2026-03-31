@@ -31,7 +31,7 @@ const SubmissionList = () => {
         const assignmentsRes = await axios.get(`${API_URL}/api/assignment/fetchAll`);
         const assignmentsMap = {};
         assignmentsRes.data.data.forEach(assignment => {
-          assignmentsMap[assignment._id] = assignment.title;
+          assignmentsMap[String(assignment._id)] = assignment.title;
         });
         setAssignments(assignmentsMap);
       } catch (error) {
@@ -344,7 +344,7 @@ const SubmissionList = () => {
                 <div className="card-body">
                   <div className="info-row">
                     <span className="info-label">Assignment ID</span>
-                    <span className="info-value">{assignments[submission.assignmentId] || submission.assignmentId}</span>
+                    <span className="info-value">{assignments[String(submission.assignmentId)] || submission.assignmentId}</span>
                   </div>
                   <div className="info-row">
                     <span className="info-label">Student ID</span>
