@@ -141,7 +141,7 @@ const submisssionController = {
     //fetch all submission
     fetchSubmission: async (req, res) => {
         try {
-            const data = await Submission.find().sort({ 'createdAt': 1 });
+            const data = await Submission.find().sort({ 'createdAt': 1 }).populate("assignmentId", "title");
             res.status(200).json({
                 data
             })
