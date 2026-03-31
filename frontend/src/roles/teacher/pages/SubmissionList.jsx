@@ -19,25 +19,19 @@ const SubmissionList = () => {
   useEffect(() => {
     const fetchReferenceData = async () => {
       try {
-        // Fetch all students - store only names
+        // Fetch all students
         const studentsRes = await axios.get(`${API_URL}/api/index`);
         const studentsMap = {};
         studentsRes.data.forEach(student => {
-          studentsMap[student._id] =
-            typeof student.name === "object"
-              ? student.name.name
-              : student.name;
+          studentsMap[student._id] = student.name;
         });
         setStudents(studentsMap);
 
-        // Fetch all assignments - store only titles
+        // Fetch all assignments
         const assignmentsRes = await axios.get(`${API_URL}/api/assignment/fetchAll`);
         const assignmentsMap = {};
         assignmentsRes.data.data.forEach(assignment => {
-          assignmentsMap[String(assignment._id)] =
-            typeof assignment.title === "object"
-              ? assignment.title.title   // fallback if nested
-              : assignment.title;
+          assignmentsMap[String(assignment._id)] = assignment.title;
         });
         setAssignments(assignmentsMap);
       } catch (error) {
@@ -350,11 +344,7 @@ const SubmissionList = () => {
                 <div className="card-body">
                   <div className="info-row">
                     <span className="info-label">Assignment ID</span>
-                    <span className="info-value">
-                      {assignments[String(submission.assignmentId)]?.title
-                        || assignments[String(submission.assignmentId)]
-                        || submission.assignmentId}
-                    </span>
+                    <span className="info-value">{submission.assignmentId?.title}</span>
                   </div>
                   <div className="info-row">
                     <span className="info-label">Student ID</span>
