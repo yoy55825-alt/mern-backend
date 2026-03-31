@@ -1,24 +1,38 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import {
-  FaUserGraduate,
-  FaChalkboardTeacher,
-  FaBook,
-  FaChartBar,
-} from "react-icons/fa";
 import './Dashboard.css'
+
 const Dashboard = () => {
   const [stats, setStats] = useState({
     totalStudents: 0,
     totalTeachers: 0,
     totalUsers: 0
   })
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+  
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
   
   const getCount = async () => {
     try {
+      setLoading(true)
+      console.log('Fetching from:', `${API_URL}/api/index`)
       const res = await axios.get(`${API_URL}/api/index`)
-      const users = res.data
+      // console.log('Response data:', res.data)
+      
+      // Check the structure of your response
+      let users = []
+      if (Array.isArray(res.data)) {
+        users = res.data
+      } else if (res.data.users && Array.isArray(res.data.users)) {
+        users = res.data.users
+      } else if (res.data.data && Array.isArray(res.data.data)) {
+        users = res.data.data
+      } else {
+        // console.error('Unexpected response structure:', res.data)
+        setError('Invalid data format received from server')
+        return
+      }
       
       // Count students and teachers based on role
       const studentsCount = users.filter(user => user.role === 'student').length
@@ -30,9 +44,12 @@ const Dashboard = () => {
         totalUsers: users.length
       })
       
-      
+      setError(null)
     } catch (error) {
       console.error('Error fetching data:', error)
+      setError(error.message || 'Failed to fetch data')
+    } finally {
+      setLoading(false)
     }
   }
   
@@ -40,10 +57,17 @@ const Dashboard = () => {
     getCount()
   }, [])
   
+  if (loading) {
+    return <div className="dashboard-container">Loading...</div>
+  }
+  
+  if (error) {
+    return <div className="dashboard-container">Error: {error}</div>
+  }
+  
   return (
     <div className="dashboard-container">
       <div className="box stats-box">
-
         <div className="stats">
           <div className="stat-card">
             <h4>Total Students</h4>
@@ -54,7 +78,11 @@ const Dashboard = () => {
             <h4>Total Teachers</h4>
             <p>{stats.totalTeachers}</p>
           </div>
-
+          
+          <div className="stat-card">
+            <h4>Total Users</h4>
+            <p>{stats.totalUsers}</p>
+          </div>
         </div>
       </div>
     </div>
