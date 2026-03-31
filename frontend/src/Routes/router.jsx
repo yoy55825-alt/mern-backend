@@ -21,7 +21,6 @@ import OnlineMC from '../roles/student/component/OnlineMC.jsx';
 import OnlineFb from '../roles/student/component/OnlineFb.jsx';
 import SubmissionList from '../roles/teacher/pages/SubmissionList.jsx';
 import GradeSubmission from '../roles/teacher/pages/GradeSubmission.jsx';
-import Home from '../roles/Home.jsx';
 
 const Router = () => {
   const { user } = useContext(UserContext);
@@ -29,12 +28,10 @@ const Router = () => {
 
 
   const router = createBrowserRouter([
-    
-      {path: '/',
-      element: user ? <App /> : <Home />,},
-
-      {path : '/login',
-      element : <Login/>,},
+    {
+      path: '/',
+      element: user ? <App /> : <Login />,
+      children: [
         {
           path: 'admin',
           element: <RequiredRole allowedRole={['admin']} />,
@@ -134,8 +131,8 @@ const Router = () => {
           path: 'unauthorized',
           element: <Unauthorized />
         },
-      
-    
+      ]
+    }
   ]);
 
   return <RouterProvider router={router} />;
