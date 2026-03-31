@@ -2,35 +2,27 @@
 import express from 'express';
 import multer from 'multer';
 import xlsx from 'xlsx';
-import fs from 'fs';
-import User from '../models/Users.js'
+import bcrypt from 'bcryptjs'; // ✅ Added bcrypt import
+import User from '../models/Users.js';
 
 const router = express.Router();
 
-// Configure multer for Excel files only
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads/')
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + '-' + file.originalname)
-  }
-});
+// ✅ Use memoryStorage for Render (no disk writes)
+const storage = multer.memoryStorage();
 
 const upload = multer({
-  storage: storage,
+  storage: storage, // ✅ Changed to memoryStorage
   fileFilter: function (req, file, cb) {
     const allowedTypes = [
       'application/vnd.ms-excel',
       'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-      'text/csv' // Optional: include CSV if needed
+      'text/csv'
     ];
 
     if (allowedTypes.includes(file.mimetype)) {
       cb(null, true);
     } else {
-      cb(new Error('Only Excel files are allowed (.xlsx, .xls)'));
+      cb(new Error('Only Excel files are allowed (.xlsx, .xls, .csv)'));
     }
   },
   limits: {
@@ -41,6 +33,7 @@ const upload = multer({
 // Bulk import users from Excel
 router.post('/bulk-import-excel', upload.single('file'), async (req, res) => {
   try {
+    // Check if file exists
     if (!req.file) {
       return res.status(400).json({
         success: false,
@@ -48,10 +41,14 @@ router.post('/bulk-import-excel', upload.single('file'), async (req, res) => {
       });
     }
 
-    const filePath = req.file.path;
+    console.log('Processing file:', {
+      name: req.file.originalname,
+      size: req.file.size,
+      type: req.file.mimetype
+    });
 
-    // Read Excel file
-    const workbook = xlsx.readFile(filePath);
+    // ✅ Read Excel file from buffer (not from disk path)
+    const workbook = xlsx.read(req.file.buffer, { type: 'buffer' });
     const sheetName = workbook.SheetNames[0];
     const sheet = workbook.Sheets[sheetName];
 
@@ -59,12 +56,13 @@ router.post('/bulk-import-excel', upload.single('file'), async (req, res) => {
     const users = xlsx.utils.sheet_to_json(sheet);
 
     if (users.length === 0) {
-      fs.unlinkSync(filePath);
       return res.status(400).json({
         success: false,
         error: 'Excel file is empty or has no data'
       });
     }
+
+    console.log(`Found ${users.length} users to process`);
 
     const processedUsers = [];
     const errors = [];
@@ -76,7 +74,7 @@ router.post('/bulk-import-excel', upload.single('file'), async (req, res) => {
       const rowNumber = i + 2; // +2 because Excel rows start at 1, and header is row 1
 
       try {
-        // Extract data with defaults
+        // Extract data with defaults (handle multiple column name variations)
         const name = row['Name'] || row['name'] || '';
         const email = (row['Email'] || row['email'] || '').toLowerCase().trim();
         const role = (row['Role'] || row['role'] || '').toLowerCase().trim();
@@ -96,7 +94,7 @@ router.post('/bulk-import-excel', upload.single('file'), async (req, res) => {
           continue;
         }
         if (!['student', 'teacher'].includes(role)) {
-          errors.push(`Row ${rowNumber}: Role must be 'student' or 'teacher'`);
+          errors.push(`Row ${rowNumber}: Role must be 'student' or 'teacher' (got: ${role})`);
           continue;
         }
 
@@ -107,56 +105,61 @@ router.post('/bulk-import-excel', upload.single('file'), async (req, res) => {
           continue;
         }
 
-        // Hash password
-        const salt = bcrypt.genSaltSync();
-        const hash = bcrypt.hashSync(password, salt);
+        // Hash password (generate default if not provided)
+        const finalPassword = password.trim() || generateRandomPassword();
+        const salt = await bcrypt.genSalt(10);
+        const hash = await bcrypt.hash(finalPassword, salt);
 
-        // Prepare user data based on your existing structure
+        // Prepare user data
         const userData = {
           name: name.trim(),
           email: email,
           role: role,
-          password : hash
+          password: hash
         };
-
-        // Add password if provided
-        // if (password.trim() !== '') {
-        //   userData.password = password.trim();
-        // }
 
         // Handle student profile
         if (role === 'student') {
+          const rollNumber = row['Roll Number'] || row['rollNo'] || row['RollNo'] || row['rollNumber'] || 0;
+          const year = row['Year'] || row['year'] || new Date().getFullYear();
+          const semester = row['Semester'] || row['semester'] || '';
+          const major = row['Major'] || row['major'] || '';
+          
           userData.studentProfile = {
-            major: row['Major'] || row['major'] || '',
-            semester: row['Semester'] || row['semester'] || '',
-            studentRollNumber: Number(row['Roll Number'] || row['rollNo'] || row['RollNo'] || 0),
-            year: Number(row['Year'] || row['year'] || new Date().getFullYear())
+            major: String(major),
+            semester: String(semester),
+            studentRollNumber: Number(rollNumber),
+            year: Number(year)
           };
         }
 
         // Handle teacher profile
         if (role === 'teacher') {
           const courses = row['Courses'] || row['courses'] || row['CoursesTeaching'] || '';
+          const department = row['Department'] || row['department'] || '';
+          
           userData.teacherProfile = {
-            department: row['Department'] || row['department'] || '',
+            department: String(department),
             coursesTeaching: courses
               ? courses.toString().split(',').map(c => c.trim()).filter(Boolean)
               : []
           };
         }
 
-        // Create user (adapt to your existing user creation logic)
+        // Create user
         const user = await User.create(userData);
         processedUsers.push(user);
         successEmails.push(email);
 
+        console.log(`✓ Created user: ${email} (${role})`);
+
       } catch (error) {
+        console.error(`Error row ${rowNumber}:`, error.message);
         errors.push(`Row ${rowNumber}: ${error.message}`);
       }
     }
 
-    // Clean up uploaded file
-    fs.unlinkSync(filePath);
+    console.log(`Import completed: ${processedUsers.length} success, ${errors.length} errors`);
 
     // Return results
     res.status(200).json({
@@ -173,17 +176,24 @@ router.post('/bulk-import-excel', upload.single('file'), async (req, res) => {
 
   } catch (error) {
     console.error('Import error:', error);
-
-    // Clean up file if exists
-    if (req.file && req.file.path) {
-      try { fs.unlinkSync(req.file.path); } catch (e) { }
-    }
-
+    
     res.status(500).json({
       success: false,
-      error: 'Failed to process Excel file. Please check the format.'
+      error: 'Failed to process Excel file. Please check the format.',
+      details: error.message
     });
   }
 });
+
+// Helper function to generate random password
+function generateRandomPassword() {
+  const length = 10;
+  const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%";
+  let password = "";
+  for (let i = 0; i < length; i++) {
+    password += charset.charAt(Math.floor(Math.random() * charset.length));
+  }
+  return password;
+}
 
 export default router;
