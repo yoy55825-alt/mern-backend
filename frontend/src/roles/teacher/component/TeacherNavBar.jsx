@@ -5,14 +5,16 @@ import {
   FaChalkboardTeacher,
   FaBook,
   FaChartBar,
-  FaFileExcel
+  FaFileExcel,
+  FaSignOutAlt,
+  FaBars
 } from "react-icons/fa";
 import React from 'react';
 import { useContext, useState } from 'react';
 import { UserContext } from "../../../context/userContext"
 import { useNavigate } from 'react-router';
 import axios from 'axios';
-
+import './TeacherNavBar.css'
 const AdminDashboard = () => {
   const { dispatch } = useContext(UserContext)
   const navigate = useNavigate()
