@@ -51,6 +51,9 @@ const AdminDashboard = () => {
 
       {/* NAVBAR */}
       <div className={`nav-right ${open ? "active" : ""}`}>
+        {/* <Link to={'/teacher/homePage'}>
+          <FaChartBar /> Home Page
+        </Link> */}
         <Link to={'/teacher/assignmentList'}>
           <FaUserGraduate /> Assignment list
         </Link>
@@ -60,6 +63,7 @@ const AdminDashboard = () => {
         <Link to={'/teacher/submissions'}>
           <FaChartBar /> submissions
         </Link>
+        
         <button onClick={handleLogout} className="logout-btn">
           <FaSignOutAlt /> Logout
         </button>

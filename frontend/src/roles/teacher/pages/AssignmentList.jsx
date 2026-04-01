@@ -5,7 +5,7 @@ import axios from 'axios';
 const AssignmentsList = () => {
   const [assignments, setAssignments] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState('all'); 
+  const [filter, setFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [assignmentToDelete, setAssignmentToDelete] = useState(null);
@@ -43,7 +43,7 @@ const AssignmentsList = () => {
 
   const handleDelete = async () => {
     if (!assignmentToDelete) return;
-    
+
     setDeleteLoading(true);
     try {
       await axios.delete(`${API_URL}/api/teacher/assignment/delete/${assignmentToDelete._id}`);
@@ -60,7 +60,7 @@ const AssignmentsList = () => {
   const filteredAssignments = assignments.filter(assignment => {
     const matchesStatus = filter === 'all' || assignment.status === filter;
     const matchesSearch = assignment.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          assignment.teacherName?.toLowerCase().includes(searchTerm.toLowerCase());
+      assignment.teacherName?.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesStatus && matchesSearch;
   });
 
@@ -112,28 +112,28 @@ const AssignmentsList = () => {
                   />
                 </div>
               </div>
-              
+
               <div className="flex gap-2">
                 <button
                   onClick={() => setFilter('all')}
-                  className={`px-3 py-1.5 rounded-lg text-sm ${filter === 'all' 
-                    ? 'bg-blue-600 text-white' 
+                  className={`px-3 py-1.5 rounded-lg text-sm ${filter === 'all'
+                    ? 'bg-blue-600 text-white'
                     : 'bg-white text-gray-700 border hover:bg-gray-50'}`}
                 >
                   All
                 </button>
                 <button
                   onClick={() => setFilter('active')}
-                  className={`px-3 py-1.5 rounded-lg text-sm ${filter === 'active' 
-                    ? 'bg-green-600 text-white' 
+                  className={`px-3 py-1.5 rounded-lg text-sm ${filter === 'active'
+                    ? 'bg-green-600 text-white'
                     : 'bg-white text-gray-700 border hover:bg-gray-50'}`}
                 >
                   Published
                 </button>
                 <button
                   onClick={() => setFilter('draft')}
-                  className={`px-3 py-1.5 rounded-lg text-sm ${filter === 'draft' 
-                    ? 'bg-yellow-600 text-white' 
+                  className={`px-3 py-1.5 rounded-lg text-sm ${filter === 'draft'
+                    ? 'bg-yellow-600 text-white'
                     : 'bg-white text-gray-700 border hover:bg-gray-50'}`}
                 >
                   Drafts
@@ -157,8 +157,8 @@ const AssignmentsList = () => {
                   </svg>
                   <h3 className="mt-4 text-lg font-medium text-gray-900">No assignments found</h3>
                   <p className="mt-2 text-gray-600 text-sm">
-                    {searchTerm 
-                      ? 'No assignments match your search' 
+                    {searchTerm
+                      ? 'No assignments match your search'
                       : 'Get started by creating your first assignment'}
                   </p>
                   {!searchTerm && (
@@ -179,9 +179,9 @@ const AssignmentsList = () => {
                     </p>
                     <button
                       onClick={fetchAssignments}
-                      className="flex items-center text-blue-600 hover:text-blue-700 text-sm"
+                      className="flex items-center gap-2 px-4 py-2 border border-blue-600 text-white-600 hover:bg-blue-50 text-sm font-medium rounded-lg transition-colors duration-200"
                     >
-                      <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                       </svg>
                       Refresh
@@ -237,11 +237,11 @@ const AssignmentsList = () => {
                               </td>
                               <td className="py-3 px-4">
                                 <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
-                                  ${assignment.status === 'active' 
-                                    ? 'bg-green-100 text-green-800' 
+                                  ${assignment.status === 'active'
+                                    ? 'bg-green-100 text-green-800'
                                     : assignment.status === 'draft'
-                                    ? 'bg-yellow-100 text-yellow-800'
-                                    : 'bg-blue-100 text-blue-800'}`}
+                                      ? 'bg-yellow-100 text-yellow-800'
+                                      : 'bg-blue-100 text-blue-800'}`}
                                 >
                                   {assignment.status.charAt(0).toUpperCase() + assignment.status.slice(1)}
                                 </span>
@@ -249,12 +249,12 @@ const AssignmentsList = () => {
                               <td className="py-3 px-4">
                                 <div className="flex items-center gap-2">
                                   <Link
-                                    to={`/teacher/assignment/${assignment._id}`}
+                                    to={`/teacher/assignment/detail/${assignment._id}`}
                                     className="inline-flex items-center px-3 py-1 bg-blue-50 text-blue-700 hover:bg-blue-100 rounded-md text-sm font-medium transition-colors"
                                   >
                                     View
                                   </Link>
-                                  
+
                                   {assignment.status === 'draft' && (
                                     <>
                                       <Link
@@ -290,14 +290,14 @@ const AssignmentsList = () => {
       {showDeleteModal && assignmentToDelete && (
         <div className="fixed inset-0 z-50 overflow-y-auto">
           {/* Background Overlay */}
-          <div 
+          <div
             className="fixed inset-0 bg-black bg-opacity-50 transition-opacity"
             onClick={closeDeleteModal}
           ></div>
-          
+
           {/* Modal */}
           <div className="flex min-h-screen items-center justify-center p-4">
-            <div 
+            <div
               className="relative bg-white rounded-lg shadow-xl max-w-md w-full mx-auto"
               onClick={(e) => e.stopPropagation()}
             >
@@ -312,7 +312,7 @@ const AssignmentsList = () => {
                   Delete Assignment
                 </h3>
                 <p className="text-gray-600 text-center text-sm mb-4">
-                  Are you sure you want to delete the assignment "{assignmentToDelete.title}"? 
+                  Are you sure you want to delete the assignment "{assignmentToDelete.title}"?
                   This action cannot be undone.
                 </p>
               </div>

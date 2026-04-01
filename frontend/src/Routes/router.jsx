@@ -22,7 +22,8 @@ import OnlineFb from '../roles/student/component/OnlineFb.jsx';
 import SubmissionList from '../roles/teacher/pages/SubmissionList.jsx';
 import GradeSubmission from '../roles/teacher/pages/GradeSubmission.jsx';
 import SubmissionDetail from '../roles/teacher/pages/SubmissionDetail.jsx';
-
+import AssignmentDetailPage from '../roles/teacher/pages/AssignmentDetailPage.jsx';
+// import HomePage from '../roles/HomePage.jsx';
 const Router = () => {
   const { user } = useContext(UserContext);
   console.log(user?.role);
@@ -64,7 +65,7 @@ const Router = () => {
             {
               path: 'excelImport',
               element: <ExcelImport />
-            }
+            },
           ]
         },
         {
@@ -92,8 +93,8 @@ const Router = () => {
               element: <OnlineMC />
             },
             {
-              path : 'online/fillBlank/:assignmentId',
-              element : <OnlineFb/>
+              path: 'online/fillBlank/:assignmentId',
+              element: <OnlineFb />
             }
 
           ]
@@ -119,17 +120,21 @@ const Router = () => {
               element: <CreateQuestion />
             },
             {
-              path : 'submissions',
-              element : <SubmissionList/>
+              path: 'submissions',
+              element: <SubmissionList />
             },
             {
-              path : 'submission/grade/file/:submissionId',
-              element : <GradeSubmission/>
+              path: 'submission/grade/file/:submissionId',
+              element: <GradeSubmission />
             },
             {
-              path : "submission/detail/:id",
-              element : <SubmissionDetail/>
-            }
+              path: "submission/detail/:id",
+              element: <SubmissionDetail />
+            },
+            {
+              path: "assignment/detail/:id",
+              element: <AssignmentDetailPage />
+            },
           ]
         },
         {

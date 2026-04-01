@@ -747,13 +747,13 @@ const AssignmentForm = () => {
 
             {/* Submit Buttons */}
             <div className="flex gap-4 pt-4">
-              <button
+              {/* <button
                 type="button"
                 onClick={saveAsDraft}
                 className="px-6 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600"
               >
                 Save as Draft
-              </button>
+              </button> */}
               <button
                 type="submit"
                 className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"

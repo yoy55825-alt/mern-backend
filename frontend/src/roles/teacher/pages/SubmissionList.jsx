@@ -237,7 +237,7 @@ const SubmissionList = () => {
             <h1>Submissions</h1>
             <p className="subtitle">Review and grade student submissions</p>
           </div>
-          <button onClick={() => navigate('/teacher/dashboard')} className="btn-secondary">
+          <button onClick={() => navigate('/teacher/assignmentList')} className="btn-secondary">
             <i className="fas fa-arrow-left"></i>
             Back to Dashboard
           </button>

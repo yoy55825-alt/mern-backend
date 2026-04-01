@@ -134,7 +134,7 @@ const OnlineSubmit = () => {
                 <div className="error-message">
                     <i className="fas fa-exclamation-circle"></i>
                     <p>{error}</p>
-                    <button onClick={() => navigate('/student/dashboard')} className="btn-primary">
+                    <button onClick={() => navigate('/student/assignmentList')} className="btn-primary">
                         Back to Dashboard
                     </button>
                 </div>
@@ -280,21 +280,25 @@ const OnlineSubmit = () => {
                             <div className="multiple-choice-options">
                                 {question.options?.map((option, optIndex) => (
                                     <label
-                                        key={option._id}
-                                        className={`mc-option ${answers[question._id] === option.optionText ? 'selected' : ''}`}
-                                    >
+                                        key={optIndex}
+                                        className={`
+                                                    flex items-center p-3 mb-2 rounded-lg border cursor-pointer
+                                                    transition-all duration-200
+                                                    ${answers[question._id] === option.optionText
+                                                ? 'border-blue-500 bg-blue-50'
+                                                : 'border-gray-200 bg-white hover:border-gray-300'
+                                            }`}>
                                         <input
                                             type="radio"
                                             name={`question_${question._id}`}
-                                            value={option.optionId}
-                                            checked={answers[question._id] === option.optionId}
-                                            onChange={() => handleAnswerChange(question._id, option.optionId)}
-                                            disabled={submitting}
+                                            value={option.optionText}
+                                            checked={answers[question._id] === option.optionText}
+                                            onChange={() => handleAnswerChange(question._id, option.optionText)}
+                                            className="w-4 h-4 text-blue-600 focus:ring-blue-500 mr-3"
                                         />
-                                        <span className="option-letter">
-                                            {option.optionId || String.fromCharCode(65 + optIndex)}
+                                        <span className="font-medium text-gray-800">
+                                            {String.fromCharCode(65 + optIndex)}. {option.optionText}
                                         </span>
-                                        <span className="option-text">{option.optionText}</span>
                                     </label>
                                 ))}
                             </div>
