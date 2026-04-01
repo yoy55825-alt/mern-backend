@@ -28,16 +28,16 @@ const GradeFileSubmission = () => {
       setLoading(true);
       // Fetch submission details
       const submissionResponse = await axios.get(`${API_URL}/api/student/submission/fetch/subId/${submissionId}`);
-      const submissionData = submissionResponse?.data?.submission[0] || [];
+      const submissionData = submissionResponse?.data?.submission?.[0] || [];
       setSubmission(submissionData);
-      console.log(submission);
+      console.log(submissionData);
       // Fetch assignment details to get max score
-      const assignmentResponse = await axios.get(`${API_URL}/api/teacher/assignment/detail/${submissionData.assignmentId}`);
+      const assignmentResponse = await axios.get(`${API_URL}/api/teacher/assignment/detail/${submissionData?.assignmentId._id}`);
       const assignmentData = assignmentResponse?.data || [];
-      // console.log(assignmentResponse);
+      console.log(assignmentResponse);
 
       setAssignment(assignmentData);
-      // console.log(assignmentData);
+      console.log(assignmentData);
 
 
       // Set max score from assignment
@@ -193,8 +193,8 @@ const GradeFileSubmission = () => {
                 <p>{submission?.studentId}</p>
               </div>
               <div className="info-item">
-                <label>Assignment ID</label>
-                <p>{submission?.assignmentId}</p>
+                <label>Assignment title</label>
+                <p>{submission?.assignmentId.title}</p>
               </div>
               <div className="info-item">
                 <label>Submitted At</label>
@@ -221,7 +221,7 @@ const GradeFileSubmission = () => {
           </div>
 
           {/* Assignment Info Card */}
-          {assignment && (
+          {assignment?.title && (
             <div className="info-card">
               <h2>
                 <i className="fas fa-tasks"></i>
