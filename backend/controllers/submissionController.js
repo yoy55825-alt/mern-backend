@@ -81,8 +81,6 @@ const submisssionController = {
                 })
             }
             const submission = await Submission.create(data);
-            assignment.status = 'submitted';
-            await assignment.save();
 
             return res.status(201).json({
                 success: true,

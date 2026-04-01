@@ -34,10 +34,10 @@ const GradeFileSubmission = () => {
       // Fetch assignment details to get max score
       const assignmentResponse = await axios.get(`${API_URL}/api/teacher/assignment/detail/${submissionData.assignmentId}`);
       const assignmentData = assignmentResponse?.data || [];
-      console.log(assignmentResponse);
+      // console.log(assignmentResponse);
 
       setAssignment(assignmentData);
-      console.log(assignmentData);
+      // console.log(assignmentData);
 
 
       // Set max score from assignment
