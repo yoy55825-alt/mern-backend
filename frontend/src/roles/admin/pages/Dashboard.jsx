@@ -10,16 +10,16 @@ const Dashboard = () => {
   })
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
-  
+
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
-  
+
   const getCount = async () => {
     try {
       setLoading(true)
       console.log('Fetching from:', `${API_URL}/api/index`)
       const res = await axios.get(`${API_URL}/api/index`)
       // console.log('Response data:', res.data)
-      
+
       // Check the structure of your response
       let users = []
       if (Array.isArray(res.data)) {
@@ -33,17 +33,17 @@ const Dashboard = () => {
         setError('Invalid data format received from server')
         return
       }
-      
+
       // Count students and teachers based on role
       const studentsCount = users.filter(user => user.role === 'student').length
       const teachersCount = users.filter(user => user.role === 'teacher').length
-      
+
       setStats({
         totalStudents: studentsCount,
         totalTeachers: teachersCount,
         totalUsers: users.length
       })
-      
+
       setError(null)
     } catch (error) {
       console.error('Error fetching data:', error)
@@ -52,36 +52,36 @@ const Dashboard = () => {
       setLoading(false)
     }
   }
-  
+
   useEffect(() => {
     getCount()
   }, [])
-  
+
   if (loading) {
     return <div className="dashboard-container">Loading...</div>
   }
-  
+
   if (error) {
     return <div className="dashboard-container">Error: {error}</div>
   }
-  
+
   return (
-    <div className="dashboard-container">
-      <div className="box stats-box">
-        <div className="stats">
-          <div className="stat-card">
-            <h4>Total Students</h4>
-            <p>{stats.totalStudents}</p>
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-6">
+      <div className="bg-white rounded-lg shadow-md max-w-3xl w-full p-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <div className="bg-white border border-gray-200 p-6 rounded-lg text-center shadow-sm">
+            <h4 className="text-lg font-medium text-gray-700">Total Students</h4>
+            <p className="text-3xl font-bold text-gray-900 mt-2">{stats.totalStudents}</p>
           </div>
 
-          <div className="stat-card">
-            <h4>Total Teachers</h4>
-            <p>{stats.totalTeachers}</p>
+          <div className="bg-white border border-gray-200 p-6 rounded-lg text-center shadow-sm">
+            <h4 className="text-lg font-medium text-gray-700">Total Teachers</h4>
+            <p className="text-3xl font-bold text-gray-900 mt-2">{stats.totalTeachers}</p>
           </div>
-          
-          <div className="stat-card">
-            <h4>Total Users</h4>
-            <p>{stats.totalUsers}</p>
+
+          <div className="bg-white border border-gray-200 p-6 rounded-lg text-center shadow-sm">
+            <h4 className="text-lg font-medium text-gray-700">Total Users</h4>
+            <p className="text-3xl font-bold text-gray-900 mt-2">{stats.totalUsers}</p>
           </div>
         </div>
       </div>
