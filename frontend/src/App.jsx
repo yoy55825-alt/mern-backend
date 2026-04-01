@@ -1,6 +1,8 @@
 import { Outlet, useLocation } from "react-router-dom";
 import AdminNavbar from './roles/admin/components/AdminNavbar'
 import TeacherNavBar from './roles/teacher/component/TeacherNavBar'
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const App = () => {
   const location = useLocation()
@@ -27,6 +29,7 @@ const App = () => {
     return (
       <div className="min-h-screen bg-gray-100">
         <TeacherNavBar />
+        <ToastContainer position="top-right" autoClose={3000} />
         <main>
           <Outlet />
         </main>
@@ -37,6 +40,7 @@ const App = () => {
   // Default layout for non-admin/teacher routes
   return (
     <div className="min-h-screen bg-gray-100">
+       <ToastContainer position="top-right" autoClose={3000} />
       <main>
         <Outlet />
       </main>

@@ -3,6 +3,7 @@ import { UserContext } from '../../../context/userContext';
 import axios from 'axios';
 import { CalendarDays, User, BookOpen, PlusCircle, Trash2, Edit3, Upload, FileText, XCircle, Settings } from 'lucide-react';
 import "./CreateQuestion.css"
+import { toast } from 'react-toastify';
 const AssignmentForm = () => {
   const { user } = useContext(UserContext);
   const [users, setUsers] = useState([]);
@@ -112,7 +113,7 @@ const AssignmentForm = () => {
   // Question management
   const addQuestion = () => {
     if (!currentQuestion.questionText.trim()) {
-      alert('Please enter question text');
+      toast.error("Please enter question text");
       return;
     }
 
@@ -120,12 +121,12 @@ const AssignmentForm = () => {
     if (currentQuestion.questionType === 'multiple_choice') {
       const validOptions = currentQuestion.options.filter(opt => opt.optionText.trim());
       if (validOptions.length < 2) {
-        alert('Please add at least 2 options');
+        toast.error("Please add at least 2 options");
         return;
       }
       const hasCorrect = currentQuestion.options.some(opt => opt.isCorrect);
       if (!hasCorrect) {
-        alert('Please select at least one correct answer');
+        toast.error("Please select at least one correct answer");
         return;
       }
     }
@@ -133,7 +134,7 @@ const AssignmentForm = () => {
     if (currentQuestion.questionType === 'fill_blank') {
       const validAnswers = currentQuestion.correctAnswers.filter(ans => ans.trim());
       if (validAnswers.length === 0) {
-        alert('Please add at least one correct answer');
+        toast.error("Please add at least one correct answer");
         return;
       }
     }
@@ -236,7 +237,7 @@ const AssignmentForm = () => {
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
     if (selectedFile && selectedFile.size > 10 * 1024 * 1024) {
-      alert('File size must be less than 10MB');
+      toast.error("File size must be less than 10MB");
       return;
     }
     setFile(selectedFile);
@@ -339,7 +340,7 @@ const AssignmentForm = () => {
       );
 
       if (res.status === 200 || res.status === 201) {
-        alert(isDraft ? 'Draft saved successfully!' : 'Assignment published successfully!');
+        toast.success(isDraft ? 'Draft saved successfully!' : 'Assignment published successfully!');
         // Reset form
         setFormData({
           title: '',
