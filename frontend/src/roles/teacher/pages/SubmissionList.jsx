@@ -176,7 +176,7 @@ const SubmissionList = () => {
   };
 
   const handleViewDetails = (submission) => {
-    navigate(`/teacher/submission/${submission._id}`);
+    navigate(`/teacher/submission/detail/${submission._id}`);
   };
 
   const handleGradeSubmission = (submission) => {
@@ -343,11 +343,11 @@ const SubmissionList = () => {
 
                 <div className="card-body">
                   <div className="info-row">
-                    <span className="info-label">Assignment ID</span>
+                    <span className="info-label">Assignment title</span>
                     <span className="info-value">{submission.assignmentId?.title}</span>
                   </div>
                   <div className="info-row">
-                    <span className="info-label">Student ID</span>
+                    <span className="info-label">Student name</span>
                     <span className="info-value">{students[submission.studentId] || submission.studentId}</span>
                   </div>
                   <div className="info-row">

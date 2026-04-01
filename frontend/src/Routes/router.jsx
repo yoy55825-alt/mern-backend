@@ -21,6 +21,7 @@ import OnlineMC from '../roles/student/component/OnlineMC.jsx';
 import OnlineFb from '../roles/student/component/OnlineFb.jsx';
 import SubmissionList from '../roles/teacher/pages/SubmissionList.jsx';
 import GradeSubmission from '../roles/teacher/pages/GradeSubmission.jsx';
+import SubmissionDetail from '../roles/teacher/pages/SubmissionDetail.jsx';
 
 const Router = () => {
   const { user } = useContext(UserContext);
@@ -125,6 +126,10 @@ const Router = () => {
               path : 'submission/grade/file/:submissionId',
               element : <GradeSubmission/>
             },
+            {
+              path : "submission/detail/:id",
+              element : <SubmissionDetail/>
+            }
           ]
         },
         {

@@ -408,7 +408,7 @@ const submisssionController = {
     fetchSubId: async (req, res) => {
         try {
             const { submissionId } = req.params;
-            const submission = await Submission.find({ _id: submissionId });
+            const submission = await Submission.find({ _id: submissionId }).populate("assignmentId", "title");
             return res.status(200).json({
                 submission
             })
