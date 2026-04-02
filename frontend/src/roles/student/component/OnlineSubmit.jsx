@@ -211,7 +211,7 @@ const OnlineSubmit = () => {
               <button onClick={() => navigate('/student/assignmentList')} className="btn-secondary">
                 Back to Dashboard
               </button>
-              <button onClick={() => window.location.reload()} className="btn-primary">
+              <button onClick={() => navigate('/student/assignmentList')} className="btn-primary">
                 View All Submissions
               </button>
             </div>
@@ -320,7 +320,7 @@ const OnlineSubmit = () => {
       <div className="submission-footer">
         <div className="progress-summary">
           <span>Answered: {Object.values(answers).filter(a => a !== null).length}/{assignment.questions?.length}</span>
-          <span>Time remaining: {formatTime(Math.max(0, (new Date(assignment.deadLine) - new Date()) / 1000))}</span>
+          {/* <span>Time remaining: {formatTime(Math.max(0, (new Date(assignment.deadLine) - new Date()) / 1000))}</span> */}
         </div>
         
         <button
