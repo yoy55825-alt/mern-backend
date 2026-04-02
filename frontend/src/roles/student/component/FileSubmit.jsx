@@ -148,10 +148,11 @@ const FileUpload = () => {
                 setFile(null);
                 const fileInput = document.getElementById('file-upload');
                 if (fileInput) fileInput.value = '';
+                navigate('/student/assignmentList')
 
-                setTimeout(() => {
-                    navigate('/student/assignmentList');
-                }, 2000);
+                // setTimeout(() => {
+                //     navigate('/student/assignmentList');
+                // }, 2000);
             }
         } catch (err) {
             console.error('Error submitting file:', err);
@@ -200,7 +201,7 @@ const FileUpload = () => {
                     <i className="fas fa-exclamation-circle"></i>
                     <h3>Error</h3>
                     <p>{error}</p>
-                    <button onClick={() => navigate('/student/assignments')} className="back-button">
+                    <button onClick={() => navigate('/student/assignmentList')} className="back-button">
                         Back to Assignments
                     </button>
                 </div>
@@ -217,7 +218,7 @@ const FileUpload = () => {
             <div className="upload-wrapper">
                 {/* Header */}
                 <div className="upload-header">
-                    <button onClick={() => navigate('/student/assignments')} className="back-btn">
+                    <button onClick={() => navigate('/student/assignmentList')} className="back-btn">
                         <i className="fas fa-arrow-left"></i> Back to Assignments
                     </button>
                     <h1>File Submission</h1>
@@ -360,7 +361,7 @@ const FileUpload = () => {
                         <div className="form-actions">
                             <button
                                 type="button"
-                                onClick={() => navigate('/student/assignments')}
+                                onClick={() => navigate('/student/assignmentList')}
                                 className="cancel-btn"
                             >
                                 Cancel
@@ -393,7 +394,7 @@ const FileUpload = () => {
                                 ? 'This assignment is no longer accepting submissions.'
                                 : 'The deadline for this assignment has passed.'}
                         </p>
-                        <button onClick={() => navigate('/student/assignments')} className="back-button">
+                        <button onClick={() => navigate('/student/assignmentList')} className="back-button">
                             Back to Assignments
                         </button>
                     </div>
