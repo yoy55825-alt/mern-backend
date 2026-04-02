@@ -9,6 +9,9 @@ import {
   FaSignOutAlt,
   FaBars
 } from "react-icons/fa";
+import { IoIosCreate } from "react-icons/io";
+import { CiViewList } from "react-icons/ci";
+import { MdAssignment } from "react-icons/md";
 import React from 'react';
 import { useContext, useState } from 'react';
 import { UserContext } from "../../../context/userContext"
@@ -55,13 +58,13 @@ const AdminDashboard = () => {
           <FaChartBar /> Home Page
         </Link> */}
         <Link to={'/teacher/assignmentList'}>
-          <FaUserGraduate /> Assignment list
+          <CiViewList /> Assignment list
         </Link>
         <Link to={'/teacher/assignment/questionType'}>
-          <FaChalkboardTeacher /> Create Assignment
+          <IoIosCreate /> Create Assignment
         </Link>
         <Link to={'/teacher/submissions'}>
-          <FaChartBar /> submissions
+          <MdAssignment /> Submissions
         </Link>
         
         <button onClick={handleLogout} className="logout-btn">

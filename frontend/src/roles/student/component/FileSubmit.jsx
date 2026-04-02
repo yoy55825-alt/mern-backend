@@ -150,7 +150,7 @@ const FileUpload = () => {
                 if (fileInput) fileInput.value = '';
 
                 setTimeout(() => {
-                    navigate('/student/assignments');
+                    navigate('/student/assignmentList');
                 }, 2000);
             }
         } catch (err) {
