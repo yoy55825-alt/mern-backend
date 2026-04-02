@@ -82,7 +82,7 @@ const submisssionController = {
             }
             const submission = await Submission.create(data);
 
-            return res.status(201).json({
+            return res.status(200).json({
                 success: true,
                 message: 'File submitted successfully',
                 data: submission
