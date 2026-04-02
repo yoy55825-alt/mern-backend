@@ -228,7 +228,7 @@ const OnlineSubmit = () => {
         <div className="error-message">
           <i className="fas fa-exclamation-circle"></i>
           <p>{error}</p>
-          <button onClick={() => navigate('/student/dashboard')} className="btn-primary">
+          <button onClick={() => navigate('/student/assignmentList')} className="btn-primary">
             Back to Dashboard
           </button>
         </div>
@@ -295,10 +295,10 @@ const OnlineSubmit = () => {
             </div>
             
             <div className="action-buttons">
-              <button onClick={() => navigate('/student/dashboard')} className="btn-secondary">
+              <button onClick={() => navigate('/student/assignmentList')} className="btn-secondary">
                 Back to Dashboard
               </button>
-              <button onClick={() => window.location.reload()} className="btn-primary">
+              <button onClick={() => navigate('/student/assignmentList')} className="btn-primary">
                 View All Submissions
               </button>
             </div>
@@ -378,7 +378,7 @@ const OnlineSubmit = () => {
       <div className="submission-footer">
         <div className="progress-summary">
           <span>Answered: {Object.values(answers).filter(a => a !== null && a !== '').length}/{assignment.questions?.length}</span>
-          <span>Time remaining: {formatTime(Math.max(0, (new Date(assignment.deadLine) - new Date()) / 1000))}</span>
+          {/* <span>Time remaining: {formatTime(Math.max(0, (new Date(assignment.deadLine) - new Date()) / 1000))}</span> */}
         </div>
         
         <button

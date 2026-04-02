@@ -244,7 +244,7 @@ const submisssionController = {
 
                     case 'multiple_choice':
                         const correctOption = question.options.find(opt => opt.isCorrect);
-                        isCorrect = submittedAnswer.answer === correctOption.optionId;
+                        isCorrect = submittedAnswer.answer === correctOption.optionId || submittedAnswer.answer === correctOption.optionText;
 
                         pointsEarned = isCorrect ? question.points : 0;
                         break;
