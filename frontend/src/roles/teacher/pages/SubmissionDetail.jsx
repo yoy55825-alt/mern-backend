@@ -14,7 +14,7 @@ const SubmissionDetail = () => {
     const fetchSubmissions = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`${API_URL}/api/student/submission/fetch/subId/${id}`); // Your API endpoint
+        const response = await axios.get(`${API_URL}/api/student/submission/fetch/subId/${id}`); 
         setSubmissions(response.data);
         console.log(response.data);
         
