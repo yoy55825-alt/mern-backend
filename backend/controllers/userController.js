@@ -140,7 +140,7 @@ const userController = {
                 secure: true,
                 sameSite: "lax",  // Works when both are under same parent domain
                 maxAge: 7 * 24 * 60 * 60 * 1000,
-                domain: ".yourdomain.com"  // Note the leading dot
+                path : '/',
             });
 
             // Return user data based on role
