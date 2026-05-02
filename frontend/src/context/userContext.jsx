@@ -39,8 +39,9 @@ const UserContextProvider = ({ children }) => {
     useEffect(() => {
         const verifyAuth = async () => {
             try {
-                // This will use the HTTP-only cookie automatically
-                const response = await axios.get(`${API_URL}/api/me`);
+                const response = await axios.get(`${API_URL}/api/me`,{
+                    withCredentials : true
+                });
                 
                 if (response.data.user) {
                     dispatch({ type: "SIGNIN", payload: response.data.user });
