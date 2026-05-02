@@ -71,11 +71,11 @@ const userController = {
             );
 
             // Set HTTP-only cookie
-            res.cookie('token', token, {
+            res.cookie("token", token, {
                 httpOnly: true,
-                secure: process.env.NODE_ENV === 'production', // Use HTTPS in production
-                sameSite: 'strict',
-                maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+                secure: true,
+                sameSite: "none",
+                maxAge: 7 * 24 * 60 * 60 * 1000,
             });
 
             // Return user data (without sensitive info)
@@ -137,10 +137,9 @@ const userController = {
 
             res.cookie("token", token, {
                 httpOnly: true,
-                secure: true,
-                sameSite: "lax",  // Works when both are under same parent domain
+                secure: true, 
+                sameSite: "none",    
                 maxAge: 7 * 24 * 60 * 60 * 1000,
-                path : '/',
             });
 
             // Return user data based on role
