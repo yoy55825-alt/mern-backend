@@ -17,7 +17,9 @@ const Dashboard = () => {
     try {
       setLoading(true)
       console.log('Fetching from:', `${API_URL}/api/index`)
-      const res = await axios.get(`${API_URL}/api/index`)
+      const res = await axios.get(`${API_URL}/api/index`,{
+        withCredentials : true
+      })
       // console.log('Response data:', res.data)
 
       // Check the structure of your response
