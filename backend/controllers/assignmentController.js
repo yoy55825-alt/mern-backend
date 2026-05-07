@@ -322,6 +322,18 @@ const assignmentController = {
                 message: error.message
             });
         }
+    },
+    filterFetch : async(req,res)=>{
+        try{
+            const {createdBy}=req.query;
+            const assignments=await Assignment.find({createdBy})
+            return res.status(200).json({
+                data : assignments
+            })
+        }
+        catch(error){
+            res.status(500).json({error : "failed to fetch assignments"})
+        }
     }
 }
 

@@ -1,9 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './SubmissionList.css';
+import { UserContext } from '../../../context/userContext';
 
 const SubmissionList = () => {
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+  const { user } = useContext(UserContext)
   const navigate = useNavigate();
   const [submissions, setSubmissions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -11,7 +14,7 @@ const SubmissionList = () => {
   const [selectedSubmission, setSelectedSubmission] = useState(null);
   const [filterType, setFilterType] = useState('all');
   const [filterStatus, setFilterStatus] = useState('all');
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+  const [filterAssignment, setFilterAssignment] = useState('all')
   const [students, setStudents] = useState([]);
   const [assignments, setAssignments] = useState([]);
 
@@ -26,14 +29,24 @@ const SubmissionList = () => {
           studentsMap[student._id] = student.name;
         });
         setStudents(studentsMap);
-
+        
         // Fetch all assignments
-        const assignmentsRes = await axios.get(`${API_URL}/api/assignment/fetchAll`);
+        const assignmentsRes = await axios.get(
+          `${API_URL}/api/teacher/assignment/filterType`,
+          {
+            withCredentials: true,
+            params: {
+              createdBy: user.id
+            }
+          }
+        );
         const assignmentsMap = {};
         assignmentsRes.data.data.forEach(assignment => {
           assignmentsMap[String(assignment._id)] = assignment.title;
         });
         setAssignments(assignmentsMap);
+        console.log(assignmentsMap);
+
       } catch (error) {
         console.error('Error fetching reference data:', error);
       }
@@ -188,10 +201,18 @@ const SubmissionList = () => {
   };
 
   const filteredSubmissions = submissions.filter(submission => {
+    // filter by type 
     if (filterType !== 'all' && submission.submissionType !== filterType) return false;
+    // filter by status
     if (filterStatus !== 'all') {
       if (filterStatus === 'graded' && submission.status !== 'graded') return false;
       if (filterStatus === 'pending' && submission.status !== 'submitted') return false;
+    }
+    // filter by assignments
+    if (filterAssignment !== 'all') {
+      if (submission.assignmentId?._id !== filterAssignment) {
+        return false;
+      }
     }
     return true;
   });
@@ -303,6 +324,7 @@ const SubmissionList = () => {
 
         {/* Filters */}
         <div className="filters-bar">
+          {/* type */}
           <div className="filter-group">
             <label>Type</label>
             <select value={filterType} onChange={(e) => setFilterType(e.target.value)}>
@@ -312,12 +334,28 @@ const SubmissionList = () => {
               <option value="paper">Paper</option>
             </select>
           </div>
+          {/* status */}
           <div className="filter-group">
             <label>Status</label>
             <select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}>
               <option value="all">All Status</option>
               <option value="graded">Graded</option>
               <option value="pending">Pending</option>
+            </select>
+          </div>
+          {/* assignment */}
+          <div className="filter-group">
+            <label>Assignment</label>
+            <select
+              value={filterAssignment}
+              onChange={(e) => setFilterAssignment(e.target.value)}
+            >
+              <option value="all">All Assignments</option>
+              {Object.entries(assignments).map(([id, title]) => (
+                <option key={id} value={id}>
+                  {title}
+                </option>
+              ))}
             </select>
           </div>
         </div>

@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { UserContext } from '../../../context/userContext';
 
 const AssignmentsList = () => {
   const [assignments, setAssignments] = useState([]);
@@ -11,6 +12,7 @@ const AssignmentsList = () => {
   const [assignmentToDelete, setAssignmentToDelete] = useState(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+  const { user } = useContext(UserContext);
 
 
   useEffect(() => {
@@ -57,11 +59,26 @@ const AssignmentsList = () => {
   };
 
   // Filter assignments based on status and search term
+  // const filteredAssignments = assignments.filter(assignment => {
+  //   const matchesStatus = filter === 'all' || assignment.status === filter;
+  //   const matchesSearch = assignment.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  //     assignment.teacherName?.toLowerCase().includes(searchTerm.toLowerCase());
+  //   return matchesStatus && matchesSearch;
+  // });
+
+  // testing filter 
   const filteredAssignments = assignments.filter(assignment => {
+    // console.log("user: ",user);
+    
+    const matchesUser = assignment.createdBy?.toString() === user?.id?.toString();
+
     const matchesStatus = filter === 'all' || assignment.status === filter;
-    const matchesSearch = assignment.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+
+    const matchesSearch =
+      assignment.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       assignment.teacherName?.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchesStatus && matchesSearch;
+
+    return matchesUser && matchesStatus && matchesSearch;
   });
 
   // Format date for display
@@ -179,7 +196,7 @@ const AssignmentsList = () => {
                     </p>
                     <button
                       onClick={fetchAssignments}
-                      className="flex items-center gap-2 px-4 py-2 border border-blue-600 text-white-600 hover:bg-blue-50 text-sm font-medium rounded-lg transition-colors duration-200"
+                      className="flex items-center gap-2 px-4 py-2 border border-blue-600 text-white-600 hover:bg-green-600 text-sm font-medium rounded-lg transition-colors duration-200"
                     >
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />

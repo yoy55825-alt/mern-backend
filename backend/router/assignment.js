@@ -13,4 +13,6 @@ router.get('/assignment/detail/:id',assignmentController.detail)
 router.patch('/assignment/update/:id',upload.array('attachments',5),assignmentController.update)
 //delete assignment
 router.delete('/assignment/delete/:assignmentId',assignmentDeleteController.deleteAssignment)
+//filter assignment for type
+router.get('/assignment/filterType',assignmentController.filterFetch) 
 export default router;
