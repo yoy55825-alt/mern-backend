@@ -327,6 +327,10 @@ const assignmentController = {
         try{
             const {createdBy}=req.query;
             const assignments=await Assignment.find({createdBy})
+            // console.log(req.query.createdBy);
+            
+            console.log("assignment: " , assignments);
+            
             return res.status(200).json({
                 data : assignments
             })
