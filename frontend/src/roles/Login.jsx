@@ -32,7 +32,7 @@ const Login = () => {
                 
                 // Navigate based on role
                 if (res.data.user.role === 'student') {
-                    navigate('/student/assignmentList');
+                    navigate('/student/dashboard');
                 } else if (res.data.user.role === 'admin') {
                     navigate('/admin/dashboard');
                 } else {

@@ -23,6 +23,7 @@ import SubmissionList from '../roles/teacher/pages/SubmissionList.jsx';
 import GradeSubmission from '../roles/teacher/pages/GradeSubmission.jsx';
 import SubmissionDetail from '../roles/teacher/pages/SubmissionDetail.jsx';
 import AssignmentDetailPage from '../roles/teacher/pages/AssignmentDetailPage.jsx';
+import StudentLayout from '../roles/student/layout/StudentLayout.jsx';
 // import HomePage from '../roles/HomePage.jsx';
 const Router = () => {
   const { user } = useContext(UserContext);
@@ -74,7 +75,7 @@ const Router = () => {
           children: [
             {
               path: 'dashboard',
-              element: <StudentDashboard />
+              element: <StudentLayout/>
             },
             {
               path: 'assignmentList',
