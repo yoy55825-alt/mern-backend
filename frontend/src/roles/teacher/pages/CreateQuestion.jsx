@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { UserContext } from '../../../context/userContext';
 import axios from 'axios';
-import { CalendarDays, User, BookOpen, PlusCircle, Trash2, Edit3, Upload, FileText, XCircle, Settings } from 'lucide-react';
+import { Users, BookOpen, Sparkles } from 'lucide-react';
 import "./CreateQuestion.css"
 import { toast } from 'react-toastify';
 const AssignmentForm = () => {
@@ -371,12 +371,23 @@ const AssignmentForm = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4">
-      <div className="max-w-4xl mx-auto">
-        <div className="bg-white rounded-lg shadow-lg p-6">
-          <h1 className="text-2xl font-bold text-gray-800 mb-6">Create New Assignment</h1>
+    <div className="cq-page">
+      <div className="cq-shell">
+        <header className="cq-header">
+          <div className="cq-header-icon"><BookOpen size={25} /></div>
+          <div>
+            <span className="cq-eyebrow"><Sparkles size={14} /> Assignment studio</span>
+            <h1>Create a new assignment</h1>
+            <p>Set the details, choose your audience, and prepare everything students need.</p>
+          </div>
+        </header>
+        <div className="cq-card">
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="cq-form space-y-6">
+            <div className="cq-section-heading">
+              <span><BookOpen size={18} /></span>
+              <div><h2>Assignment details</h2><p>Give students a clear overview of the work.</p></div>
+            </div>
             {/* Title */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -414,7 +425,7 @@ const AssignmentForm = () => {
             </div>
 
             {/* Teacher Selection */}
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-4 cq-responsive-grid">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Department <span className="text-red-500">*</span>
@@ -496,6 +507,12 @@ const AssignmentForm = () => {
                   )}
             </div>
 
+            <div className="cq-divider" />
+            <div className="cq-section-heading">
+              <span><Users size={18} /></span>
+              <div><h2>Student audience</h2><p>Choose who should receive this assignment.</p></div>
+            </div>
+
             {/* Target Students */}
             <div className="grid grid-cols-3 gap-4">
               <div>
@@ -561,7 +578,7 @@ const AssignmentForm = () => {
 
             {/* Online Assignment Section */}
             {formData.submissionType === 'online' && (
-              <div className="border-t pt-6 space-y-6">
+              <div className="cq-online space-y-6">
                 <h2 className="text-xl font-semibold text-gray-800">Questions & Settings</h2>
 
                 {/* Question Type Selection */}
@@ -581,10 +598,10 @@ const AssignmentForm = () => {
                 </div>
 
                 {/* Add Question Form */}
-                <div className="bg-gray-50 p-4 rounded-lg">
+                <div className="cq-question-builder">
                   <h3 className="font-medium text-gray-800 mb-3">Add New Question</h3>
 
-                  <div className="space-y-3">
+                  <div className="space-y-3 cq-builder-fields">
                     <input
                       type="text"
                       placeholder="Question text"
@@ -698,7 +715,7 @@ const AssignmentForm = () => {
 
                 {/* Questions List */}
                 {questions.length > 0 && (
-                  <div className="space-y-3">
+                  <div className="space-y-3 cq-question-list">
                     <h3 className="font-medium text-gray-800">Questions ({questions.length}) - Total Points: {totalPoints}</h3>
                     {questions.map((q, idx) => (
                       <div key={q.id || idx} className="border p-3 rounded-lg">
@@ -726,7 +743,7 @@ const AssignmentForm = () => {
 
             {/* File Upload */}
             {(formData.submissionType === 'paper' || formData.submissionType === 'file') && (
-              <div>
+              <div className="cq-upload">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Attachments(optional)
                 </label>
@@ -746,7 +763,7 @@ const AssignmentForm = () => {
             )}
 
             {/* Submit Buttons */}
-            <div className="flex gap-4 pt-4">
+            <div className="cq-actions">
               {/* <button
                 type="button"
                 onClick={saveAsDraft}
@@ -756,9 +773,9 @@ const AssignmentForm = () => {
               </button> */}
               <button
                 type="submit"
-                className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                className="cq-publish-btn"
               >
-                Publish Assignment
+                Publish assignment
               </button>
             </div>
           </form>

@@ -244,7 +244,9 @@ const CreateAcc = () => {
                         </div>
                     )}
 
-                    <button type='submit' className="submit-btn">Create Account</button>
+                    <button type='submit' className="submit-btn">
+                        {isEditing ? 'Update user information' : 'Create Account'}
+                    </button>
                 </form>
             </div>
         </div>

@@ -1,6 +1,7 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import './Dashboard.css'
+import { FaUserGraduate, FaChalkboardTeacher, FaUsers } from 'react-icons/fa'
 
 const Dashboard = () => {
   const [stats, setStats] = useState({
@@ -60,32 +61,20 @@ const Dashboard = () => {
   }, [])
 
   if (loading) {
-    return <div className="dashboard-container">Loading...</div>
+    return <div className="app-page"><div className="dashboard-container">Loading dashboard…</div></div>
   }
 
   if (error) {
-    return <div className="dashboard-container">Error: {error}</div>
+    return <div className="app-page"><div className="dashboard-container">Error: {error}</div></div>
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-6">
-      <div className="bg-white rounded-lg shadow-md max-w-3xl w-full p-6">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          <div className="bg-white border border-gray-200 p-6 rounded-lg text-center shadow-sm">
-            <h4 className="text-lg font-medium text-gray-700">Total Students</h4>
-            <p className="text-3xl font-bold text-gray-900 mt-2">{stats.totalStudents}</p>
-          </div>
-
-          <div className="bg-white border border-gray-200 p-6 rounded-lg text-center shadow-sm">
-            <h4 className="text-lg font-medium text-gray-700">Total Teachers</h4>
-            <p className="text-3xl font-bold text-gray-900 mt-2">{stats.totalTeachers}</p>
-          </div>
-
-          <div className="bg-white border border-gray-200 p-6 rounded-lg text-center shadow-sm">
-            <h4 className="text-lg font-medium text-gray-700">Total Users</h4>
-            <p className="text-3xl font-bold text-gray-900 mt-2">{stats.totalUsers}</p>
-          </div>
-        </div>
+    <div className="app-page">
+      <header className="app-page-header"><div><p className="app-page-kicker">Administration</p><h1 className="app-page-title">Workspace overview</h1><p className="app-page-subtitle">A quick look at your learning community.</p></div></header>
+      <div className="app-grid">
+        <div className="app-stat"><div className="app-stat-icon"><FaUserGraduate /></div><strong>{stats.totalStudents}</strong><span>Active students</span></div>
+        <div className="app-stat"><div className="app-stat-icon"><FaChalkboardTeacher /></div><strong>{stats.totalTeachers}</strong><span>Teaching staff</span></div>
+        <div className="app-stat"><div className="app-stat-icon"><FaUsers /></div><strong>{stats.totalUsers}</strong><span>Total accounts</span></div>
       </div>
     </div>
   )

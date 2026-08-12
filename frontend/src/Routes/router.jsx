@@ -1,5 +1,5 @@
 import App from '../App.jsx';
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { Navigate, RouterProvider, createBrowserRouter } from "react-router-dom";
 import Dashboard from '../roles/admin/pages/Dashboard.jsx';
 import CreateAcc from '../roles/admin/pages/CreateAcc.jsx';
 import Unauthorized from '../roles/admin/components/Unauthorized.jsx'
@@ -17,8 +17,6 @@ import CreateQuestion from '../roles/teacher/pages/CreateQuestion.jsx';
 import StudentAssignmentList from '../roles/student/pages/AssignmentList.jsx';
 import FileSubmit from '../roles/student/component/FileSubmit.jsx';
 import OnlineSubmit from '../roles/student/component/OnlineSubmit.jsx';
-import OnlineMC from '../roles/student/component/OnlineMC.jsx';
-import OnlineFb from '../roles/student/component/OnlineFb.jsx';
 import SubmissionList from '../roles/teacher/pages/SubmissionList.jsx';
 import GradeSubmission from '../roles/teacher/pages/GradeSubmission.jsx';
 import SubmissionDetail from '../roles/teacher/pages/SubmissionDetail.jsx';
@@ -26,15 +24,40 @@ import AssignmentDetailPage from '../roles/teacher/pages/AssignmentDetailPage.js
 import StudentLayout from '../roles/student/layout/StudentLayout.jsx';
 // import HomePage from '../roles/HomePage.jsx';
 const Router = () => {
-  const { user } = useContext(UserContext);
+  const { user, loading } = useContext(UserContext);
   console.log(user?.role);
 
+  const homePath = user?.role === 'admin'
+    ? '/admin/dashboard'
+    : user?.role === 'teacher'
+      ? '/teacher/assignment/questionType'
+      : '/student/assignmentList';
+
+  const protectedElement = loading
+    ? <div>Loading...</div>
+    : user
+      ? <App />
+      : <Navigate to="/login" replace />;
+
+  const loginElement = loading
+    ? <div>Loading...</div>
+    : user
+      ? <Navigate to={homePath} replace />
+      : <Login />;
 
   const router = createBrowserRouter([
     {
+      path: '/login',
+      element: loginElement,
+    },
+    {
       path: '/',
-      element: user ? <App /> : <Login />,
+      element: protectedElement,
       children: [
+        {
+          index: true,
+          element: <Navigate to={homePath} replace />,
+        },
         {
           path: 'admin',
           element: <RequiredRole allowedRole={['admin']} />,
@@ -88,14 +111,6 @@ const Router = () => {
             {
               path: 'online/:assignmentId',
               element: <OnlineSubmit />
-            },
-            {
-              path: 'online/mc/:assignmentId',
-              element: <OnlineMC />
-            },
-            {
-              path: 'online/fillBlank/:assignmentId',
-              element: <OnlineFb />
             }
 
           ]
@@ -143,7 +158,11 @@ const Router = () => {
           element: <Unauthorized />
         },
       ]
-    }
+    },
+    {
+      path: '*',
+      element: <Navigate to={user ? homePath : '/login'} replace />,
+    },
   ]);
 
   return <RouterProvider router={router} />;

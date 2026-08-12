@@ -249,14 +249,10 @@ const submisssionController = {
                         pointsEarned = isCorrect ? question.points : 0;
                         break;
 
-                    case 'short_answer':
-                        // For short answer, check against correct answers (case insensitive)
-                        if (question.correctAnswers && question.correctAnswers.length > 0) {
-                            isCorrect = question.correctAnswers.some(
-                                correct => correct.toLowerCase() === submittedAnswer.answer?.toLowerCase()
-                            );
-                        }
-                        pointsEarned = isCorrect ? question.points : 0;
+                    case 'short_note':
+                        // Short notes require a teacher to grade them manually.
+                        isCorrect = false;
+                        pointsEarned = 0;
                         break;
 
                     case 'essay':
@@ -314,9 +310,11 @@ const submisssionController = {
                 status: 'submitted'
             };
 
-            // 8. Auto-grade if all questions are auto-gradable (no essay questions)
-            const hasEssayQuestions = assignment.questions.some(q => q.questionType === 'essay');
-            if (!hasEssayQuestions) {
+            // 8. Only auto-grade when every question has an objective answer.
+            const hasManualQuestions = assignment.questions.some(q =>
+                q.questionType === 'essay' || q.questionType === 'short_note'
+            );
+            if (!hasManualQuestions) {
                 submissionData.status = 'graded';
                 submissionData.grade = {
                     score: totalEarnedPoints,

@@ -49,10 +49,12 @@ const Login = () => {
     return (
         <div className="login-container">
             <form onSubmit={Login} className="login-box">
-                <FaUser className="logo-icon" />
-                <h2 className="login-title">Login</h2>
+                <div className="login-brand"><FaUser className="logo-icon" /><span>TaskWave</span></div>
+                <p className="login-kicker">Welcome back</p>
+                <h2 className="login-title">Sign in to continue</h2>
+                <p className="login-subtitle">Access assignments, submissions, and your workspace.</p>
 
-                {error && <div className="error-message" style={{color: 'red', marginBottom: '10px'}}>{error}</div>}
+                {error && <div className="error-message">{error}</div>}
 
                 <div className="input-group">
                     <FaEnvelope className="icon" />
@@ -60,7 +62,7 @@ const Login = () => {
                         value={email} 
                         onChange={e => setEmail(e.target.value)} 
                         type="email" 
-                        placeholder="Email" 
+                        placeholder="Email address"
                         required 
                     />
                 </div>
@@ -77,7 +79,7 @@ const Login = () => {
                 </div>
 
                 <button className="login-btn" type="submit">
-                    <FaSignInAlt /> Submit
+                    <FaSignInAlt /> Sign in
                 </button>
             </form>
         </div>

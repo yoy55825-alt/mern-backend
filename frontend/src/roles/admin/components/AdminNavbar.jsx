@@ -1,10 +1,9 @@
 
-import { Link } from 'react-router';
+import { NavLink } from 'react-router';
 import './AdminNavbar.css'
 import {
   FaUserGraduate,
   FaChalkboardTeacher,
-  FaBook,
   FaChartBar,
   FaFileExcel 
 } from "react-icons/fa";
@@ -31,7 +30,7 @@ const AdminDashboard = () => {
     <div className="admin-container">
       {/* HEADER */}
       <div className="admin-header">
-        <h2>Admin Dashboard</h2>
+        <div className="admin-brand"><img src="/webicon7.png" alt="TaskWave logo" /><div><h2>TaskWave</h2><small>Administration</small></div></div>
         <button onClick={handleLogout} className="logout-btn">Logout</button>
       </div>
 
@@ -39,24 +38,24 @@ const AdminDashboard = () => {
       <div className="admin-navbar">
         <ul>
           <li>
-            <Link to={'/admin/studentManagement'}>
+            <NavLink to={'/admin/studentManagement'}>
               <FaUserGraduate /> Student Management
-            </Link>
+            </NavLink>
           </li>
           <li>
-            <Link to={'/admin/teacherManagement'}>
+            <NavLink to={'/admin/teacherManagement'}>
               <FaChalkboardTeacher /> Teacher Management
-            </Link>
+            </NavLink>
           </li>
           <li>
-            <Link to={'admin/dashboard'}>
+            <NavLink to={'/admin/dashboard'}>
               <FaChartBar /> Statistics
-            </Link>
+            </NavLink>
           </li>
           <li>
-            <Link to={'/admin/excelImport'}>
+            <NavLink to={'/admin/excelImport'}>
               <FaFileExcel />Excel spreadsheet
-            </Link>
+            </NavLink>
           </li>
         </ul>
       </div>

@@ -102,7 +102,7 @@ const SubmissionList = () => {
         return (
           <div className="score-wrapper">
             <span className="score-number">{earned}/{total}</span>
-            <span className="score-percent">({percentage}%)</span>
+            <span className="score-percent">({Number(percentage).toFixed(2)}%)</span>
           </div>
         );
       } else if (submission.grade && submission.grade.score !== undefined) {

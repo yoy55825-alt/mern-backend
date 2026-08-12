@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { UserContext } from '../../../context/userContext';
 import './AssignmentList.css';
-import { Link } from 'react-router';
 import { useNavigate } from 'react-router';
 
 const AssignmentList = () => {
@@ -11,6 +10,7 @@ const AssignmentList = () => {
   const [filteredAssignments, setFilteredAssignments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [submissionsMap, setSubmissionsMap] = useState({}); // Store submission status for each assignment
+  const [activeFilter, setActiveFilter] = useState('all');
   const navigate = useNavigate();
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
@@ -154,32 +154,6 @@ const AssignmentList = () => {
     }
   };
 
-  // Updated function to check submission status
-  const shouldShowSubmitButton = (assignmentId, submissionType, status, deadline) => {
-    const isPastDeadline = new Date(deadline) < new Date();
-
-    // Get submission status from the map
-    const submissionStatus = submissionsMap[assignmentId]?.status;
-    console.log(submissionStatus);
-
-    // If already submitted, don't show submit button
-    if (submissionStatus === 'submitted' || submissionStatus === 'graded') {
-      return false;
-    }
-
-    // If late submission but still allowed (optional logic)
-    if (submissionStatus === 'late' && isPastDeadline) {
-      // You might want to allow late submissions or not
-      // For now, we'll allow but show a warning
-      return true;
-    }
-
-    if (submissionType === 'none' || submissionType === 'paper') return false;
-    if (status === 'closed') return false;
-    if (isPastDeadline) return false;
-    return true;
-  };
-
   // Get button text and style based on submission status
   const getSubmitButtonConfig = (assignmentId, submissionType, assignmentStatus, deadline) => {
     const submissionStatus = submissionsMap[assignmentId]?.status;
@@ -266,7 +240,7 @@ const AssignmentList = () => {
     };
   };
 
-  const handleSubmit = (assignmentId, submissionType, assignmentTitle, questionType) => {
+  const handleSubmit = (assignmentId, submissionType) => {
     // Check if already submitted before navigating
     const submissionStatus = submissionsMap[assignmentId]?.status;
 
@@ -276,15 +250,7 @@ const AssignmentList = () => {
     }
 
     if (submissionType === 'online') {
-      if (questionType === 'true_false') {
-        navigate('/student/online/' + assignmentId);
-      } else if (questionType === 'multiple_choice') {
-        navigate('/student/online/mc/' + assignmentId);
-      }else if (questionType === 'fill_blank'){
-        navigate('/student/online/fillBlank/'+assignmentId)
-      } else {
-        navigate('/student/online/' + assignmentId);
-      }
+      navigate('/student/online/' + assignmentId);
     } else if (submissionType === 'file') {
       navigate('/student/fileUpload/' + assignmentId);
     }
@@ -302,6 +268,24 @@ const AssignmentList = () => {
         return { text: 'Read Only', icon: 'fa-eye', color: 'none' };
     }
   };
+
+  const completedStatuses = ['submitted', 'graded', 'late'];
+  const isCompleted = (assignmentId) => completedStatuses.includes(submissionsMap[assignmentId]?.status);
+  const isClosed = (assignment) => assignment.status === 'closed' || new Date(assignment.deadLine) < new Date();
+  const assignmentStats = {
+    all: filteredAssignments.length,
+    due: filteredAssignments.filter((assignment) => !isClosed(assignment) && !isCompleted(assignment._id)).length,
+    submitted: filteredAssignments.filter((assignment) => isCompleted(assignment._id)).length,
+    closed: filteredAssignments.filter((assignment) => isClosed(assignment) && !isCompleted(assignment._id)).length
+  };
+  const visibleAssignments = filteredAssignments
+    .filter((assignment) => {
+      if (activeFilter === 'due') return !isClosed(assignment) && !isCompleted(assignment._id);
+      if (activeFilter === 'submitted') return isCompleted(assignment._id);
+      if (activeFilter === 'closed') return isClosed(assignment) && !isCompleted(assignment._id);
+      return true;
+    })
+    .sort((a, b) => new Date(a.deadLine) - new Date(b.deadLine));
 
   if (loading) {
     return (
@@ -352,24 +336,24 @@ const AssignmentList = () => {
   return (
     <div className="assignment-list-container">
       <div className="header-section">
-        <h1 className="page-title">
-          <i className="fas fa-tasks"></i>
-          Assignments
-        </h1>
-        <p className="subtitle">Track your deadlines and submit your work</p>
+        <div className="eyebrow"><i className="fas fa-graduation-cap"></i> Student workspace</div>
+        <h1 className="page-title">Your assignments</h1>
+        <p className="subtitle">Stay on top of your coursework and upcoming deadlines.</p>
       </div>
 
       {getUserInfoDisplay()}
 
-      <div className="assignments-stats">
-        <span className="stats-badge">
-          <i className="fas fa-book-open"></i>
-          Showing {filteredAssignments.length} assignment{filteredAssignments.length !== 1 ? 's' : ''}
-        </span>
+      <div className="list-toolbar">
+        <div><h2>Coursework</h2><p>{visibleAssignments.length} assignment{visibleAssignments.length !== 1 ? 's' : ''} shown</p></div>
+        <div className="filter-tabs" aria-label="Filter assignments">
+          {[["all", "All"], ["due", "To do"], ["submitted", "Completed"], ["closed", "Closed"]].map(([value, label]) => (
+            <button key={value} className={activeFilter === value ? 'active' : ''} onClick={() => setActiveFilter(value)}>{label}<span>{assignmentStats[value]}</span></button>
+          ))}
+        </div>
       </div>
 
       <div className="assignments-grid">
-        {filteredAssignments.map((assignment) => {
+        {visibleAssignments.map((assignment) => {
           const daysLeft = getDaysLeft(assignment.deadLine);
           const statusBadge = getStatusBadge(assignment.status, assignment.deadLine);
           const isPastDeadline = new Date(assignment.deadLine) < new Date();
@@ -466,7 +450,7 @@ const AssignmentList = () => {
                 {buttonConfig.show ? (
                   <button
                     className={`submit-btn submit-btn-${buttonConfig.className}`}
-                    onClick={() => handleSubmit(assignment._id, assignment.submissionType, assignment.title, assignment.questionType)}
+                    onClick={() => handleSubmit(assignment._id, assignment.submissionType)}
                     disabled={buttonConfig.disabled}
                   >
                     <i className={`fas ${buttonConfig.icon}`}></i>
@@ -483,6 +467,7 @@ const AssignmentList = () => {
           );
         })}
       </div>
+      {visibleAssignments.length === 0 && <div className="filter-empty"><i className="fas fa-check-circle"></i><h3>Nothing here right now</h3><p>Try another filter to see your assignments.</p></div>}
     </div>
   );
 };

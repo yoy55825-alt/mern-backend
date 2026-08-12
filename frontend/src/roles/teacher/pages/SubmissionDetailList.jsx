@@ -1,85 +1,105 @@
-import React from 'react';
+import { useNavigate } from 'react-router';
+import {
+  FaArrowLeft,
+  FaCheckCircle,
+  FaClock,
+  FaFileAlt,
+  FaLaptop,
+  FaRedoAlt,
+  FaRegCalendarAlt,
+  FaStar,
+} from 'react-icons/fa';
+
+const formatDate = (value) => {
+  if (!value) return 'Not available';
+  return new Date(value).toLocaleString('en-US', {
+    month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit',
+  });
+};
+
+const formatTime = (seconds) => {
+  if (seconds === undefined || seconds === null) return 'Not available';
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = seconds % 60;
+  return `${minutes}m ${remainingSeconds}s`;
+};
 
 const SubmissionDetailList = ({ data }) => {
-  // Assuming data is the API response structure you provided
-    const submissions = Array.isArray(data) 
-    ? data 
-    : (data?.submission || data?.submissions || []);
+  const navigate = useNavigate();
+  const submissions = Array.isArray(data) ? data : (data?.submission || data?.submissions || []);
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <div className="bg-white rounded-lg shadow-md overflow-hidden">
-        <div className="bg-gray-800 text-white px-6 py-4">
-          <h2 className="text-xl font-semibold">Assignment Submissions</h2>
+    <main className="submission-detail-page">
+      <button className="submission-back" type="button" onClick={() => navigate(-1)}>
+        <FaArrowLeft /> Back to submissions
+      </button>
+
+      <header className="submission-detail-heading">
+        <div>
+          <span className="submission-eyebrow">Submission review</span>
+          <h1>Submission details</h1>
+          <p>Review the result, timing, and grading information in one place.</p>
         </div>
-        
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Assignment Title
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Student Score
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Submission Type
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Submitted At
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {submissions.map((submission) => (
-                <tr key={submission._id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">
-                      {submission.assignmentId?.title || 'N/A'}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center">
-                      <span className={`px-2 py-1 text-sm font-semibold rounded-full ${
-                        submission.grade?.score >= (submission.onlineSubmission?.score?.total / 2)
-                          ? 'bg-green-100 text-green-800'
-                          : 'bg-red-100 text-red-800'
-                      }`}>
-                        {submission.grade?.score || 0} / {submission.onlineSubmission?.score?.total || 'N/A'}
-                      </span>
-                      {submission.onlineSubmission?.score?.percentage && (
-                        <span className="ml-2 text-xs text-gray-500">
-                          ({submission.onlineSubmission.score.percentage}%)
-                        </span>
-                      )}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                      submission.submissionType === 'online'
-                        ? 'bg-blue-100 text-blue-800'
-                        : 'bg-purple-100 text-purple-800'
-                    }`}>
-                      {submission.submissionType === 'online' ? '📝 Online' : '📎 Paper'}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {new Date(submission.submittedAt).toLocaleString()}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        
-        {submissions.length === 0 && (
-          <div className="text-center py-8 text-gray-500">
-            No submissions found
-          </div>
-        )}
-      </div>
-    </div>
+        <span className="submission-count">{submissions.length} record{submissions.length === 1 ? '' : 's'}</span>
+      </header>
+
+      {submissions.length === 0 ? (
+        <section className="submission-empty">
+          <FaFileAlt />
+          <h2>No submission found</h2>
+          <p>This submission may have been removed or is no longer available.</p>
+        </section>
+      ) : submissions.map((submission) => {
+        const onlineScore = submission.onlineSubmission?.score;
+        const earned = onlineScore?.earned ?? submission.grade?.score ?? 0;
+        const total = onlineScore?.total;
+        const rawPercentage = onlineScore?.percentage ?? (total ? (earned / total) * 100 : 0);
+        const percentage = Number.isFinite(Number(rawPercentage)) ? Number(rawPercentage) : 0;
+        const status = submission.status || 'pending';
+
+        return (
+          <article className="submission-detail-card" key={submission._id}>
+            <div className="submission-card-top">
+              <div className={`submission-type-icon ${submission.submissionType || 'paper'}`}>
+                {submission.submissionType === 'online' ? <FaLaptop /> : <FaFileAlt />}
+              </div>
+              <div className="submission-title-copy">
+                <span>{submission.submissionType || 'Submission'}</span>
+                <h2>{submission.assignmentId?.title || 'Untitled assignment'}</h2>
+              </div>
+              <span className={`submission-status ${status}`}><FaCheckCircle /> {status}</span>
+            </div>
+
+            <div className="submission-card-body">
+              <section className="submission-score-panel">
+                <div className="submission-score-ring" style={{ '--score': `${Math.min(100, Math.max(0, percentage)) * 3.6}deg` }}>
+                  <div><strong>{percentage.toFixed(2)}%</strong><span>Final score</span></div>
+                </div>
+                <div className="submission-score-copy">
+                  <span>Points earned</span>
+                  <strong>{earned}{total !== undefined ? ` / ${total}` : ' points'}</strong>
+                  <div className="submission-progress"><span style={{ width: `${Math.min(100, Math.max(0, percentage))}%` }} /></div>
+                </div>
+              </section>
+
+              <section className="submission-facts">
+                <div><span className="fact-icon"><FaRegCalendarAlt /></span><p>Submitted</p><strong>{formatDate(submission.submittedAt)}</strong></div>
+                <div><span className="fact-icon"><FaClock /></span><p>Time spent</p><strong>{formatTime(submission.onlineSubmission?.timeSpent)}</strong></div>
+                <div><span className="fact-icon"><FaRedoAlt /></span><p>Attempts</p><strong>{submission.onlineSubmission?.attemptsCount ?? 'Not available'}</strong></div>
+                <div><span className="fact-icon"><FaStar /></span><p>Graded at</p><strong>{formatDate(submission.grade?.gradedAt)}</strong></div>
+              </section>
+            </div>
+
+            {submission.grade?.feedback && (
+              <section className="submission-feedback">
+                <span>Teacher feedback</span>
+                <p>{submission.grade.feedback}</p>
+              </section>
+            )}
+          </article>
+        );
+      })}
+    </main>
   );
 };
 

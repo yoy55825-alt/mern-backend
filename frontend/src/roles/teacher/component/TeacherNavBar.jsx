@@ -1,5 +1,5 @@
 
-import { Link } from 'react-router';
+import { NavLink } from 'react-router';
 import {
   FaUserGraduate,
   FaChalkboardTeacher,
@@ -57,15 +57,15 @@ const AdminDashboard = () => {
         {/* <Link to={'/teacher/homePage'}>
           <FaChartBar /> Home Page
         </Link> */}
-        <Link to={'/teacher/assignmentList'}>
+        <NavLink to={'/teacher/assignmentList'}>
           <CiViewList /> Assignment list
-        </Link>
-        <Link to={'/teacher/assignment/questionType'}>
+        </NavLink>
+        <NavLink to={'/teacher/assignment/questionType'}>
           <IoIosCreate /> Create Assignment
-        </Link>
-        <Link to={'/teacher/submissions'}>
+        </NavLink>
+        <NavLink to={'/teacher/submissions'}>
           <MdAssignment /> Submissions
-        </Link>
+        </NavLink>
         
         <button onClick={handleLogout} className="logout-btn">
           <FaSignOutAlt /> Logout
