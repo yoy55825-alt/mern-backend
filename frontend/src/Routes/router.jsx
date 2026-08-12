@@ -21,7 +21,6 @@ import SubmissionList from '../roles/teacher/pages/SubmissionList.jsx';
 import GradeSubmission from '../roles/teacher/pages/GradeSubmission.jsx';
 import SubmissionDetail from '../roles/teacher/pages/SubmissionDetail.jsx';
 import AssignmentDetailPage from '../roles/teacher/pages/AssignmentDetailPage.jsx';
-import StudentLayout from '../roles/student/layout/StudentLayout.jsx';
 // import HomePage from '../roles/HomePage.jsx';
 const Router = () => {
   const { user, loading } = useContext(UserContext);
@@ -31,7 +30,7 @@ const Router = () => {
     ? '/admin/dashboard'
     : user?.role === 'teacher'
       ? '/teacher/assignment/questionType'
-      : '/student/assignmentList';
+      : '/student/dashboard';
 
   const protectedElement = loading
     ? <div>Loading...</div>
@@ -98,7 +97,7 @@ const Router = () => {
           children: [
             {
               path: 'dashboard',
-              element: <StudentLayout/>
+              element: <StudentDashboard />
             },
             {
               path: 'assignmentList',
