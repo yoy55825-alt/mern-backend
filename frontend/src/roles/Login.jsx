@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import './Login.css';
-import { FaUser, FaEnvelope, FaSignInAlt, FaLock } from "react-icons/fa";
+import { FaEnvelope, FaSignInAlt, FaLock } from "react-icons/fa";
 import { useState } from "react";
 import axios from 'axios';
 import { useNavigate } from "react-router";
@@ -49,7 +49,7 @@ const Login = () => {
     return (
         <div className="login-container">
             <form onSubmit={Login} className="login-box">
-                <div className="login-brand"><FaUser className="logo-icon" /><span>TaskWave</span></div>
+                <div className="login-brand"><img src="/webicon7.png" alt="TaskWave logo" /><span>TaskWave</span></div>
                 <p className="login-kicker">Welcome back</p>
                 <h2 className="login-title">Sign in to continue</h2>
                 <p className="login-subtitle">Access assignments, submissions, and your workspace.</p>
