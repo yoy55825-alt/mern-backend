@@ -7,7 +7,8 @@ import {
   FaChartBar,
   FaFileExcel,
   FaSignOutAlt,
-  FaBars
+  FaBars,
+  FaHome
 } from "react-icons/fa";
 import { IoIosCreate } from "react-icons/io";
 import { CiViewList } from "react-icons/ci";
@@ -54,16 +55,16 @@ const AdminDashboard = () => {
 
       {/* NAVBAR */}
       <div className={`nav-right ${open ? "active" : ""}`}>
-        {/* <Link to={'/teacher/homePage'}>
-          <FaChartBar /> Home Page
-        </Link> */}
-        <NavLink to={'/teacher/assignmentList'}>
+        <NavLink to={'/teacher/home'} onClick={() => setOpen(false)}>
+          <FaHome /> Home
+        </NavLink>
+        <NavLink to={'/teacher/assignmentList'} onClick={() => setOpen(false)}>
           <CiViewList /> Assignment list
         </NavLink>
-        <NavLink to={'/teacher/assignment/questionType'}>
+        <NavLink to={'/teacher/assignment/questionType'} onClick={() => setOpen(false)}>
           <IoIosCreate /> Create Assignment
         </NavLink>
-        <NavLink to={'/teacher/submissions'}>
+        <NavLink to={'/teacher/submissions'} onClick={() => setOpen(false)}>
           <MdAssignment /> Submissions
         </NavLink>
         

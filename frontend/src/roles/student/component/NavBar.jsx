@@ -13,7 +13,8 @@ const Navbar = () => {
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
   const navLinks = [
-    { to: '/student/dashboard', label: 'Overview', icon: <FaHome /> },
+    { to: '/student/home', label: 'Home', icon: <FaHome /> },
+    { to: '/student/dashboard', label: 'Overview', icon: <FaClipboardList /> },
     { to: '/student/assignmentList', label: 'Assignments', icon: <FaClipboardList /> },
   ];
 
@@ -34,7 +35,7 @@ const Navbar = () => {
       <div className="portal-nav-inner">
 
           {/* Logo */}
-          <NavLink to="/student/assignmentList" className="portal-brand">
+          <NavLink to="/student/home" className="portal-brand">
             <img src="/webicon7.png" alt="TaskWave logo" />
             <strong>TaskWave</strong>
           </NavLink>

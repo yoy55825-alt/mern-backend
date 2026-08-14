@@ -1,6 +1,7 @@
 import App from '../App.jsx';
 import { Navigate, RouterProvider, createBrowserRouter } from "react-router-dom";
 import Dashboard from '../roles/admin/pages/Dashboard.jsx';
+import AdminHome from '../roles/admin/pages/AdminHome.jsx';
 import CreateAcc from '../roles/admin/pages/CreateAcc.jsx';
 import Unauthorized from '../roles/admin/components/Unauthorized.jsx'
 import { useContext } from 'react';
@@ -27,10 +28,10 @@ const Router = () => {
   console.log(user?.role);
 
   const homePath = user?.role === 'admin'
-    ? '/admin/dashboard'
+    ? '/admin/home'
     : user?.role === 'teacher'
-      ? '/teacher/assignment/questionType'
-      : '/student/dashboard';
+      ? '/teacher/home'
+      : '/student/home';
 
   const protectedElement = loading
     ? <div>Loading...</div>
@@ -61,6 +62,14 @@ const Router = () => {
           path: 'admin',
           element: <RequiredRole allowedRole={['admin']} />,
           children: [
+            {
+              index: true,
+              element: <Navigate to="home" replace />
+            },
+            {
+              path: 'home',
+              element: <AdminHome />
+            },
             {
               path: 'dashboard',
               element: <Dashboard />
@@ -96,6 +105,14 @@ const Router = () => {
           element: <RequiredRole allowedRole={['student']} />,
           children: [
             {
+              index: true,
+              element: <Navigate to="home" replace />
+            },
+            {
+              path: 'home',
+              element: <AdminHome />
+            },
+            {
               path: 'dashboard',
               element: <StudentDashboard />
             },
@@ -118,6 +135,14 @@ const Router = () => {
           path: 'teacher',
           element: <RequiredRole allowedRole={['teacher']} />,
           children: [
+            {
+              index: true,
+              element: <Navigate to="home" replace />
+            },
+            {
+              path: 'home',
+              element: <AdminHome />
+            },
             {
               path: 'createAssignment',
               element: <CreateAssignment />
