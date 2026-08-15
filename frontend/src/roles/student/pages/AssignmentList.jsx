@@ -11,13 +11,13 @@ const AssignmentList = () => {
   const [loading, setLoading] = useState(true);
   const [submissionsMap, setSubmissionsMap] = useState({}); // Store submission status for each assignment
   const [activeFilter, setActiveFilter] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
   // Get user from context
   const { user } = useContext(UserContext);
-
-  console.log('Current User:', user);
 
   useEffect(() => {
     fetchAssignments();
@@ -40,10 +40,12 @@ const AssignmentList = () => {
   const fetchAssignments = async () => {
     try {
       setLoading(true);
+      setError('');
       const response = await axios.get(`${API_URL}/api/student/assignment/fetchAll`);
       setAssignments(response.data.data || []);
     } catch (error) {
       console.error('Error fetching assignments:', error);
+      setError('We could not load your assignments. Please check your connection and try again.');
     } finally {
       setLoading(false);
     }
@@ -98,15 +100,12 @@ const AssignmentList = () => {
 
     const { year, major, semester } = user;
 
-    console.log('Filtering assignments for:', { year, major, semester });
-
     const filtered = assignments.filter(assignment => {
       const assignmentYear = assignment.targetYear;
       const assignmentMajor = assignment.targetMajor;
       const assignmentSemester = assignment.targetSemester;
 
       if (!assignmentYear && !assignmentMajor && !assignmentSemester) {
-        console.log('Assignment has no target fields, showing:', assignment.title);
         return true;
       }
 
@@ -117,7 +116,6 @@ const AssignmentList = () => {
       return yearMatch && majorMatch && semesterMatch;
     });
 
-    console.log(`Filtered ${filtered.length} out of ${assignments.length} assignments`);
     setFilteredAssignments(filtered);
   };
 
@@ -285,7 +283,18 @@ const AssignmentList = () => {
       if (activeFilter === 'closed') return isClosed(assignment) && !isCompleted(assignment._id);
       return true;
     })
+    .filter((assignment) => {
+      const query = searchQuery.trim().toLowerCase();
+      if (!query) return true;
+      return [assignment.title, assignment.description, assignment.teacherName, assignment.targetMajor]
+        .filter(Boolean)
+        .some((value) => value.toLowerCase().includes(query));
+    })
     .sort((a, b) => new Date(a.deadLine) - new Date(b.deadLine));
+
+  const nextDueAssignment = filteredAssignments
+    .filter((assignment) => !isClosed(assignment) && !isCompleted(assignment._id))
+    .sort((a, b) => new Date(a.deadLine) - new Date(b.deadLine))[0];
 
   if (loading) {
     return (
@@ -302,11 +311,24 @@ const AssignmentList = () => {
       <div className="user-info-banner">
         <i className="fas fa-user-graduate"></i>
         <span>
-          {user.name} · Year {user.year} · {user.major} · {user.semester === 'first' ? 'First Semester' : 'Second Semester'}
+          {user.name} <span aria-hidden="true">/</span> Year {user.year} <span aria-hidden="true">/</span> {user.major} <span aria-hidden="true">/</span> {user.semester === 'first' ? 'First Semester' : 'Second Semester'}
         </span>
       </div>
     );
   };
+
+  if (error) {
+    return (
+      <main className="assignment-list-container">
+        <div className="error-state" role="alert">
+          <div className="state-icon"><i className="fas fa-wifi"></i></div>
+          <h2>Assignments are unavailable</h2>
+          <p>{error}</p>
+          <button type="button" onClick={fetchAssignments}><i className="fas fa-rotate-right"></i> Try again</button>
+        </div>
+      </main>
+    );
+  }
 
   if (filteredAssignments.length === 0) {
     return (
@@ -334,21 +356,38 @@ const AssignmentList = () => {
   }
 
   return (
-    <div className="assignment-list-container">
-      <div className="header-section">
-        <div className="eyebrow"><i className="fas fa-graduation-cap"></i> Student workspace</div>
-        <h1 className="page-title">Your assignments</h1>
-        <p className="subtitle">Stay on top of your coursework and upcoming deadlines.</p>
-      </div>
+    <main className="assignment-list-container">
+      <section className="assignment-hero">
+        <div className="header-section">
+          <div className="eyebrow"><i className="fas fa-graduation-cap"></i> Student workspace</div>
+          <h1 className="page-title">Your assignments</h1>
+          <p className="subtitle">Stay on top of coursework, deadlines, and submissions.</p>
+        </div>
+        {nextDueAssignment && (
+          <div className="next-deadline-card">
+            <span>Next deadline</span>
+            <strong>{nextDueAssignment.title}</strong>
+            <small><i className="fas fa-calendar-day"></i> {formatDeadline(nextDueAssignment.deadLine)}</small>
+          </div>
+        )}
+      </section>
 
       {getUserInfoDisplay()}
 
       <div className="list-toolbar">
         <div><h2>Coursework</h2><p>{visibleAssignments.length} assignment{visibleAssignments.length !== 1 ? 's' : ''} shown</p></div>
-        <div className="filter-tabs" aria-label="Filter assignments">
-          {[["all", "All"], ["due", "To do"], ["submitted", "Completed"], ["closed", "Closed"]].map(([value, label]) => (
-            <button key={value} className={activeFilter === value ? 'active' : ''} onClick={() => setActiveFilter(value)}>{label}<span>{assignmentStats[value]}</span></button>
-          ))}
+        <div className="toolbar-actions">
+          <label className="assignment-search">
+            <span className="sr-only">Search assignments</span>
+            <i className="fas fa-magnifying-glass"></i>
+            <input value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)} placeholder="Search assignments" />
+            {searchQuery && <button type="button" onClick={() => setSearchQuery('')} aria-label="Clear search"><i className="fas fa-xmark"></i></button>}
+          </label>
+          <div className="filter-tabs" aria-label="Filter assignments">
+            {[["all", "All"], ["due", "To do"], ["submitted", "Completed"], ["closed", "Closed"]].map(([value, label]) => (
+              <button type="button" key={value} className={activeFilter === value ? 'active' : ''} onClick={() => setActiveFilter(value)} aria-pressed={activeFilter === value}>{label}<span>{assignmentStats[value]}</span></button>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -362,7 +401,7 @@ const AssignmentList = () => {
           const submissionStatus = submissionsMap[assignment._id]?.status;
 
           return (
-            <div key={assignment._id} className="assignment-card">
+            <article key={assignment._id} className={`assignment-card card-type-${assignment.submissionType || 'none'} ${isPastDeadline ? 'assignment-card-closed' : ''}`}>
               <div className="card-header">
                 <div className="header-left">
                   <span className={`assignment-type-badge assignment-type-${submissionDisplay.color}`} data-type={assignment.submissionType}>
@@ -392,7 +431,7 @@ const AssignmentList = () => {
                   <div className="course-info">
                     <i className="fas fa-graduation-cap"></i>
                     <span>
-                      Year {assignment.targetYear} · {assignment.targetMajor} ·
+                      Year {assignment.targetYear} <span aria-hidden="true">/</span> {assignment.targetMajor} <span aria-hidden="true">/</span>
                       {assignment.targetSemester === 'first' ? ' First Semester' : ' Second Semester'}
                     </span>
                   </div>
@@ -422,7 +461,7 @@ const AssignmentList = () => {
                   <div className="deadline-details">
                     <div className="deadline-label">Submission Deadline</div>
                     <div className="deadline-date">{formatDeadline(assignment.deadLine)}</div>
-                    {!isPastDeadline && daysLeft > 0 && (
+                    {!isPastDeadline && daysLeft >= 0 && (
                       <div className={`days-left ${daysLeft <= 3 ? 'urgent' : ''}`}>
                         <i className="fas fa-hourglass-half"></i>
                         {daysLeft === 0 ? ' Due today!' : ` ${daysLeft} day${daysLeft !== 1 ? 's' : ''} left`}
@@ -441,7 +480,7 @@ const AssignmentList = () => {
                   <div className="questions-preview">
                     <i className="fas fa-question-circle"></i>
                     <span>{assignment.questions.length} question{assignment.questions.length !== 1 ? 's' : ''}</span>
-                    {assignment.questionType && <span> · {assignment.questionType === 'true_false' ? 'True/False' : assignment.questionType === 'multiple_choice' ? 'Multiple Choice' : assignment.questionType}</span>}
+                    {assignment.questionType && <span> / {assignment.questionType === 'true_false' ? 'True/False' : assignment.questionType === 'multiple_choice' ? 'Multiple Choice' : assignment.questionType}</span>}
                   </div>
                 )}
               </div>
@@ -463,12 +502,12 @@ const AssignmentList = () => {
                   </div>
                 )}
               </div>
-            </div>
+            </article>
           );
         })}
       </div>
-      {visibleAssignments.length === 0 && <div className="filter-empty"><i className="fas fa-check-circle"></i><h3>Nothing here right now</h3><p>Try another filter to see your assignments.</p></div>}
-    </div>
+      {visibleAssignments.length === 0 && <div className="filter-empty"><div className="state-icon"><i className={`fas ${searchQuery ? 'fa-magnifying-glass' : 'fa-check-circle'}`}></i></div><h3>{searchQuery ? 'No matching assignments' : 'Nothing here right now'}</h3><p>{searchQuery ? 'Try a different title, teacher, or course.' : 'Try another filter to see your assignments.'}</p>{searchQuery && <button type="button" onClick={() => setSearchQuery('')}>Clear search</button>}</div>}
+    </main>
   );
 };
 
