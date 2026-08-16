@@ -7,8 +7,8 @@ const questions = [
     id: 'tum-statue',
     text: 'TUM ကျောင်းရှေ့က ရုပ်ထုကြီးရဲ့အမည်က ဘာလဲ?',
     hint: 'TUM ၏ သမိုင်းနှင့် နည်းပညာတိုးတက်ရေးကို ကိုယ်စားပြုသော မင်းသားကြီးကို စဉ်းစားပါ။',
-    correctAnswer: 'd',
-    explanation: 'အဖြေမှန်က ကနောင်မင်းသားကြီး ဖြစ်ပါတယ်။',
+    correctAnswer: 'a',
+    explanation: 'အဖြေမှန်က ဦးရွှေရိုး ဖြစ်ပါတယ်။',
     options: [
       { id: 'a', label: 'ဦးရွှေရိုး' },
       { id: 'b', label: 'ဒေါ်မိုး' },
