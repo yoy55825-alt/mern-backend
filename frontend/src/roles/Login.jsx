@@ -3,7 +3,7 @@ import './Login.css';
 import { FaEnvelope, FaSignInAlt, FaLock } from "react-icons/fa";
 import { useState } from "react";
 import axios from 'axios';
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { UserContext } from "../context/userContext";
 
 const Login = () => {
@@ -81,6 +81,10 @@ const Login = () => {
                 <button className="login-btn" type="submit">
                     <FaSignInAlt /> Sign in
                 </button>
+                <div className="login-divider"><span>or</span></div>
+                <Link className="guest-login-link" to="/guest/welcome">
+                    Explore as a guest
+                </Link>
             </form>
         </div>
     );

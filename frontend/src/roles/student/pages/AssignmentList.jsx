@@ -3,6 +3,7 @@ import axios from 'axios';
 import { UserContext } from '../../../context/userContext';
 import './AssignmentList.css';
 import { useNavigate } from 'react-router';
+import { FaSearch, FaTimes } from 'react-icons/fa';
 
 const AssignmentList = () => {
   // State for assignments and loading
@@ -377,11 +378,11 @@ const AssignmentList = () => {
       <div className="list-toolbar">
         <div><h2>Coursework</h2><p>{visibleAssignments.length} assignment{visibleAssignments.length !== 1 ? 's' : ''} shown</p></div>
         <div className="toolbar-actions">
-          <label className="assignment-search">
+          <label className="assignment-search student-assignment-search">
             <span className="sr-only">Search assignments</span>
-            <i className="fas fa-magnifying-glass"></i>
-            <input value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)} placeholder="Search assignments" />
-            {searchQuery && <button type="button" onClick={() => setSearchQuery('')} aria-label="Clear search"><i className="fas fa-xmark"></i></button>}
+            <FaSearch aria-hidden="true" />
+            <input type="search" value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)} placeholder="Search by title, teacher or course" autoComplete="off" />
+            {searchQuery && <button type="button" onClick={() => setSearchQuery('')} aria-label="Clear search"><FaTimes /></button>}
           </label>
           <div className="filter-tabs" aria-label="Filter assignments">
             {[["all", "All"], ["due", "To do"], ["submitted", "Completed"], ["closed", "Closed"]].map(([value, label]) => (

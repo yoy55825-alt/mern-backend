@@ -2,6 +2,7 @@ import { Outlet, useLocation } from "react-router-dom";
 import AdminNavbar from './roles/admin/components/AdminNavbar'
 import TeacherNavBar from './roles/teacher/component/TeacherNavBar'
 import StudentNavBar from './roles/student/component/NavBar'
+import GuestNavBar from './roles/guest/components/GuestNavBar'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -11,6 +12,7 @@ const App = () => {
   const isAdminRoute = location.pathname.startsWith('/admin')
   const isTeacherRoute = location.pathname.startsWith('/teacher')
   const isStudentRoute = location.pathname.startsWith('/student')
+  const isGuestRoute = location.pathname.startsWith('/guest')
 
   // For admin routes, AdminNavbar already contains its own main/outlet structure
   // For teacher routes, we need to wrap with main tag
@@ -44,6 +46,15 @@ const App = () => {
       <div className="app-shell student-shell">
         <StudentNavBar />
         <ToastContainer position="top-right" autoClose={3000} />
+        <main><Outlet /></main>
+      </div>
+    )
+  }
+
+  if (isGuestRoute) {
+    return (
+      <div className="app-shell guest-shell">
+        <GuestNavBar />
         <main><Outlet /></main>
       </div>
     )

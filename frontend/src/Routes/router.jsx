@@ -22,6 +22,7 @@ import SubmissionList from '../roles/teacher/pages/SubmissionList.jsx';
 import GradeSubmission from '../roles/teacher/pages/GradeSubmission.jsx';
 import SubmissionDetail from '../roles/teacher/pages/SubmissionDetail.jsx';
 import AssignmentDetailPage from '../roles/teacher/pages/AssignmentDetailPage.jsx';
+import GuestWelcome from '../roles/guest/pages/GuestWelcome.jsx';
 // import HomePage from '../roles/HomePage.jsx';
 const Router = () => {
   const { user, loading } = useContext(UserContext);
@@ -49,6 +50,15 @@ const Router = () => {
     {
       path: '/login',
       element: loginElement,
+    },
+    {
+      path: '/guest',
+      element: <App />,
+      children: [
+        { index: true, element: <Navigate to="welcome" replace /> },
+        { path: 'home', element: <AdminHome /> },
+        { path: 'welcome', element: <GuestWelcome /> },
+      ],
     },
     {
       path: '/',

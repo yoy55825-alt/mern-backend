@@ -121,7 +121,7 @@ const AssignmentsList = () => {
           <div className="teacher-toolbar-actions">
             <label className="teacher-assignment-search">
               <FaSearch /><span className="teacher-sr-only">Search assignments</span>
-              <input value={searchTerm} onChange={(event) => setSearchTerm(event.target.value)} placeholder="Search assignments" />
+              <input type="search" value={searchTerm} onChange={(event) => setSearchTerm(event.target.value)} placeholder="Search by title, course or description" autoComplete="off" />
               {searchTerm && <button type="button" onClick={() => setSearchTerm('')} aria-label="Clear search"><FaTimes /></button>}
             </label>
             <div className="teacher-filter-tabs" aria-label="Filter by status">
