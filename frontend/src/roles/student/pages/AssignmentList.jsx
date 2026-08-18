@@ -5,6 +5,30 @@ import './AssignmentList.css';
 import { useNavigate } from 'react-router';
 import { FaSearch, FaTimes } from 'react-icons/fa';
 
+const normalizeMajor = (major = '') => {
+  const normalized = major.trim().toUpperCase();
+
+  // Existing records use several values for the same department.
+  const ceitAliases = new Set([
+    'IT',
+    'CEIT',
+    'INFORMATION TECHNOLOGY',
+    'INFORMATION TECHNOLOGY ENGINEERING',
+    'COMPUTER ENGINEERING AND INFORMATION TECHNOLOGY'
+  ]);
+
+  return ceitAliases.has(normalized) ? 'CEIT' : normalized;
+};
+
+const normalizeSemester = (semester = '') => {
+  const normalized = String(semester).trim().toLowerCase();
+
+  if (normalized === '1' || normalized === 'first') return 'first';
+  if (normalized === '2' || normalized === 'second') return 'second';
+
+  return normalized;
+};
+
 const AssignmentList = () => {
   // State for assignments and loading
   const [assignments, setAssignments] = useState([]);
@@ -111,8 +135,8 @@ const AssignmentList = () => {
       }
 
       const yearMatch = assignmentYear === year;
-      const majorMatch = assignmentMajor === major;
-      const semesterMatch = assignmentSemester === semester;
+      const majorMatch = normalizeMajor(assignmentMajor) === normalizeMajor(major);
+      const semesterMatch = normalizeSemester(assignmentSemester) === normalizeSemester(semester);
 
       return yearMatch && majorMatch && semesterMatch;
     });
@@ -312,7 +336,7 @@ const AssignmentList = () => {
       <div className="user-info-banner">
         <i className="fas fa-user-graduate"></i>
         <span>
-          {user.name} <span aria-hidden="true">/</span> Year {user.year} <span aria-hidden="true">/</span> {user.major} <span aria-hidden="true">/</span> {user.semester === 'first' ? 'First Semester' : 'Second Semester'}
+          {user.name} <span aria-hidden="true">/</span> Year {user.year} <span aria-hidden="true">/</span> {user.major} <span aria-hidden="true">/</span> {normalizeSemester(user.semester) === 'first' ? 'First Semester' : 'Second Semester'}
         </span>
       </div>
     );
@@ -348,7 +372,7 @@ const AssignmentList = () => {
           <p>No assignments match your year, major, and semester criteria</p>
           {user && (
             <p className="empty-state-hint">
-              You are in Year {user.year}, {user.major}, {user.semester === 'first' ? 'First' : 'Second'} Semester
+              You are in Year {user.year}, {user.major}, {normalizeSemester(user.semester) === 'first' ? 'First' : 'Second'} Semester
             </p>
           )}
         </div>

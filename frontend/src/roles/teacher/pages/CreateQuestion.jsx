@@ -4,6 +4,19 @@ import axios from 'axios';
 import { Users, BookOpen, Sparkles } from 'lucide-react';
 import "./CreateQuestion.css"
 import { toast } from 'react-toastify';
+
+const normalizeDepartment = (department = '') => {
+  const normalized = department.trim().toUpperCase();
+
+  // Keep teachers created before the IT department was renamed to CEIT
+  // available in the CEIT teacher list.
+  if (normalized === 'IT' || normalized === 'CEIT') {
+    return 'CEIT';
+  }
+
+  return normalized;
+};
+
 const AssignmentForm = () => {
   const { user } = useContext(UserContext);
   const [users, setUsers] = useState([]);
@@ -67,7 +80,7 @@ const AssignmentForm = () => {
     { value: 'Electrical', label: 'Electrical Engineering' },
     { value: 'Electrical power', label: 'Electrical Power Engineering' },
     { value: 'Mechanical', label: 'Mechanical Engineering' },
-    { value: 'IT', label: 'Computer Engineering and Information Technology' },
+    { value: 'Computer Engineering and Information Technology', label: 'Computer Engineering and Information Technology' },
     { value: 'Architecture', label: 'Architecture' },
     { value: 'Mechatronic', label: 'Mechatronic Engineering' },
     { value: 'Petrol', label: 'Petroleum Engineering' },
@@ -473,7 +486,10 @@ const AssignmentForm = () => {
                 >
                   <option value="">Select Teacher</option>
                   {selectedDepartment && users
-                    .filter(u => u.role === 'teacher' && u.teacherProfile?.department === selectedDepartment)
+                    .filter(u =>
+                      u.role === 'teacher' &&
+                      normalizeDepartment(u.teacherProfile?.department) === normalizeDepartment(selectedDepartment)
+                    )
                     .map(teacher => (
                       <option key={teacher._id} value={teacher.name}>{teacher.name}</option>
                     ))
