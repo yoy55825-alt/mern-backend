@@ -89,10 +89,10 @@ const ExcelImport = () => {
     // Create sample Excel data
     const sampleData = [
       ['Name', 'Email', 'Role', 'Password', 'Major', 'Semester', 'Roll Number', 'Year', 'Department', 'Courses'],
-      ['John Doe', 'john@example.com', 'student', 'password123', 'Computer Science', '4', '1001', '2024', '', ''],
-      ['Jane Smith', 'jane@example.com', 'teacher', 'password456', '', '', '', '2024', 'Mathematics', 'Algebra,Calculus'],
-      ['Bob Wilson', 'bob@example.com', 'student', '', 'Physics', '2', '1002', '2024', '', ''],
-      ['Alice Johnson', 'alice@example.com', 'teacher', '', '', '', '', '2024', 'Computer Science', 'Data Structures,Algorithms']
+      ['John Doe', 'john@example.com', 'student', 'password123', 'Computer Science', '4', '1001', '3', '', ''],
+      ['Jane Smith', 'jane@example.com', 'teacher', 'password456', '', '', '', '3', 'Mathematics', 'Algebra,Calculus'],
+      ['Bob Wilson', 'bob@example.com', 'student', '', 'Physics', '2', '1002', '3', '', ''],
+      ['Alice Johnson', 'alice@example.com', 'teacher', '', '', '', '', '3', 'Computer Science', 'Data Structures,Algorithms']
     ];
 
     const ws = XLSX.utils.aoa_to_sheet(sampleData);

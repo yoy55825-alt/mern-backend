@@ -177,11 +177,11 @@ const CreateAcc = () => {
                                     <option value="Ec">Electronic Engineering</option>
                                     <option value="Ep">Electrical Engineering</option>
                                     <option value="Mech">Mechnical Engineering</option>
-                                    <option value="IT">Information Technology Engineering</option>
+                                    <option value="CEIT">Computer Engineering and Information Technology</option>
                                     <option value="Mc">Mechatronic Engineering</option>
                                     <option value="Che">Chemical Engineering</option>
                                     <option value="Min">Mining Engineering</option>
-                                    <option value="Pt">Petroleum Engineering</option>
+                                    <option value="PE">Petroleum Engineering</option>
                                 </select>
                             </div>
                         </div>
@@ -228,7 +228,7 @@ const CreateAcc = () => {
                                     <option value="Ec">Electronic Engineering</option>
                                     <option value="Ep">Electrical Engineering</option>
                                     <option value="Mech">Mechnical Engineering</option>
-                                    <option value="IT">Information Technology Engineering</option>
+                                    <option value="CEIT">Computer Engineering and Information Technology</option>
                                     <option value="Mc">Mechatronic Engineering</option>
                                     <option value="Che">Chemical Engineering</option>
                                     <option value="Min">Mining Engineering</option>

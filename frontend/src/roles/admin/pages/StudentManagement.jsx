@@ -77,7 +77,7 @@ function StudentManagement() {
   const majorCount = new Set(students.map((student) => student.studentProfile?.major).filter(Boolean)).size;
 
   const deleteStudent = async (student) => {
-    if (!window.confirm(`Remove ${student.name || "this student"}? This action cannot be undone.`)) return;
+    // if (!window.confirm(`Remove ${student.name || "this student"}? This action cannot be undone.`)) return;
 
     try {
       setDeletingId(student._id);

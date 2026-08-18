@@ -67,7 +67,7 @@ const AssignmentForm = () => {
     { value: 'Electrical', label: 'Electrical Engineering' },
     { value: 'Electrical power', label: 'Electrical Power Engineering' },
     { value: 'Mechanical', label: 'Mechanical Engineering' },
-    { value: 'IT', label: 'Information Technology' },
+    { value: 'IT', label: 'Computer Engineering and Information Technology' },
     { value: 'Architecture', label: 'Architecture' },
     { value: 'Mechatronic', label: 'Mechatronic Engineering' },
     { value: 'Petrol', label: 'Petroleum Engineering' },
