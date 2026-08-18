@@ -74,7 +74,7 @@ function TeacherManagement() {
   }, [department, search, teachers]);
 
   const deleteTeacher = async (teacher) => {
-    if (!window.confirm(`Remove ${teacher.name || "this teacher"}? This action cannot be undone.`)) return;
+    // if (!window.confirm(`Remove ${teacher.name || "this teacher"}? This action cannot be undone.`)) return;
 
     try {
       setDeletingId(teacher._id);
