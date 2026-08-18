@@ -90,6 +90,32 @@ const AssignmentForm = () => {
     { value: 'essay', label: 'Essay Only' }
   ];
 
+  const createEmptyQuestion = (type = 'multiple_choice') => ({
+    questionText: '',
+    questionType: type,
+    points: 1,
+    options: [
+      { optionText: '', isCorrect: false },
+      { optionText: '', isCorrect: false }
+    ],
+    correctAnswers: [''],
+    correctBoolean: true,
+    wordLimit: 500,
+    hint: '',
+    required: true
+  });
+
+  const handleOverallQuestionTypeChange = (e) => {
+    const type = e.target.value;
+    setQuestionType(type);
+
+    // A specific overall type applies to every question. Mixed assignments let
+    // the teacher choose a type separately for each question.
+    if (type !== 'mixed') {
+      setCurrentQuestion(prev => ({ ...prev, questionType: type }));
+    }
+  };
+
   // Fetch users
   useEffect(() => {
     fetchUsers();
@@ -160,20 +186,9 @@ const AssignmentForm = () => {
     setQuestions([...questions, formattedQuestion]);
 
     // Reset current question
-    setCurrentQuestion({
-      questionText: '',
-      questionType: 'multiple_choice',
-      points: 1,
-      options: [
-        { optionText: '', isCorrect: false },
-        { optionText: '', isCorrect: false }
-      ],
-      correctAnswers: [''],
-      correctBoolean: true,
-      wordLimit: 500,
-      hint: '',
-      required: true
-    });
+    setCurrentQuestion(createEmptyQuestion(
+      questionType === 'mixed' ? 'multiple_choice' : questionType
+    ));
   };
 
   const removeQuestion = (index) => {
@@ -588,7 +603,7 @@ const AssignmentForm = () => {
                   </label>
                   <select
                     value={questionType}
-                    onChange={(e) => setQuestionType(e.target.value)}
+                    onChange={handleOverallQuestionTypeChange}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     {questionTypeOptions.map(opt => (
@@ -614,7 +629,9 @@ const AssignmentForm = () => {
                       <select
                         value={currentQuestion.questionType}
                         onChange={(e) => setCurrentQuestion({ ...currentQuestion, questionType: e.target.value })}
-                        className="px-3 py-2 border border-gray-300 rounded-md"
+                        disabled={questionType !== 'mixed'}
+                        title={questionType !== 'mixed' ? 'Choose Mixed Types to change individual question types' : undefined}
+                        className="px-3 py-2 border border-gray-300 rounded-md disabled:bg-gray-100 disabled:text-gray-500 disabled:cursor-not-allowed"
                       >
                         <option value="multiple_choice">Multiple Choice</option>
                         <option value="true_false">True/False</option>

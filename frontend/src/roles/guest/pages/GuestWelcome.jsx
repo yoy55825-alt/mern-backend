@@ -5,28 +5,124 @@ import './GuestWelcome.css';
 const questions = [
   {
     id: 'tum-statue',
-    text: 'TUM ကျောင်းရှေ့က ရုပ်ထုကြီးရဲ့အမည်က ဘာလဲ?',
-    hint: 'TUM ၏ သမိုင်းနှင့် နည်းပညာတိုးတက်ရေးကို ကိုယ်စားပြုသော မင်းသားကြီးကို စဉ်းစားပါ။',
-    correctAnswer: 'a',
-    explanation: 'အဖြေမှန်က ဦးရွှေရိုး ဖြစ်ပါတယ်။',
+    text: 'TUM ကျောင်းရဲ့ အထင်ကရရုပ်ထုအမည်ကိုဖြေပါ။',
+    // hint: 'TUM ၏ သမိုင်းနှင့် နည်းပညာတိုးတက်ရေးကို ကိုယ်စားပြုသော မင်းသားကြီးကို စဉ်းစားပါ။',
+    correctAnswer: 'b',
+    explanation: 'အဖြေမှန်က ဖန်ချက်ဝန် ဦးရွှေရိုး ဖြစ်ပါတယ်။',
     options: [
-      { id: 'a', label: 'ဦးရွှေရိုး' },
-      { id: 'b', label: 'ဒေါ်မိုး' },
-      { id: 'c', label: 'ဦးအောင်ဇေယျ' },
-      { id: 'd', label: 'ကနောင်မင်းသားကြီး' },
+      { id: 'a', label: 'ဖန်ချက်ဝန် ဦးရွှေအိုး' },
+      { id: 'b', label: 'ဖန်ချက်ဝန် ဦးရွှေရိုး' },
+      { id: 'c', label: 'ဖန်ချက်ဝန် ဦးငွေအိုး' },
+      { id: 'd', label: 'ဖန်ချက်ဝန် ဦးငွေရိုး' },
     ],
   },
   {
-    id: 'min-khant-hein-orientation',
-    text: 'မင်းခန့်ဟိန်းရဲ့ Sexual orientation က ဘာလဲ?',
+    id: 'tum-name',
+    text: 'TUM ရဲ့ နာမည်အပြည့်အစုံကိုဖြေပါ။',
     correctAnswer: 'b',
-    explanation: 'အဖြေမှန်က Gay ဖြစ်ပါတယ်။',
+    explanation: 'အဖြေမှန်က Technological University (Mandalay) ဖြစ်ပါတယ်။',
     options: [
-      { id: 'a', label: 'Straight' },
-      { id: 'b', label: 'Gay' },
-      { id: 'c', label: 'Bisexual' },
-      { id: 'd', label: 'Lesbian' },
+      { id: 'a', label: 'Mandalay Technological University' },
+      { id: 'b', label: 'Technological University (Mandalay)' },
+      { id: 'c', label: 'Magway Technological University' },
+      { id: 'd', label: 'Technological University (Magway)' },
     ],
+  },
+  {
+    id: 'tum-majorCount',
+    text: 'TUM မှာ စုစုပေါင်း major ဘယ်နှခုရှိပါသလဲ။',
+    correctAnswer: 'c',
+    explanation: 'အဖြေမှန်က 10ခု ဖြစ်ပါတယ်။',
+    options: [
+      { id: 'a', label: '8' },
+      { id: 'b', label: '9' },
+      { id: 'c', label: '10' },
+      { id: 'd', label: '11' },
+    ],
+  },
+  {
+    id: 'tum-drawing',
+    text: 'Engineering ကျောင်းသားတွေ အများဆုံးတွေ့ရတဲ့ Drawing အမျိုးအစားက ဘာလဲ?',
+    correctAnswer: 'a',
+    explanation: 'အဖြေမှန်က Engineering Drawing ဖြစ်ပါတယ်။',
+    options: [
+      { id: 'a', label: 'Engineering Drawing' },
+      { id: 'b', label: 'Digital Drawing' },
+      { id: 'c', label: 'Cartoon Drawing' },
+      { id: 'd', label: 'Portrait Drawing' },
+      ],
+  },
+  {
+    id: 'ceit-name',
+    text: 'CEIT major ရဲ့ နာမည်အပြည့်အစုံကိုဖြေပါ။',
+    correctAnswer: 'b',
+    explanation: 'အဖြေမှန်က Computer Engineering and Information Technology ဖြစ်ပါတယ်။',
+    options: [
+      { id: 'a', label: 'Computer Electronics and Information Technology' },
+      { id: 'b', label: 'Computer Engineering and Information Technology' },
+      { id: 'c', label: 'Computer Engineering and International Technology' },
+      { id: 'd', label: 'Compound Engineering and Information Technology' },
+      ],
+  },
+  {
+    id: 'ceit-major',
+    text: 'CEIT major တွင် အောက်ပါဘာသာရပ်များထဲမှ မည်သည့်ဘာသာရပ်ကို သင်ယူနိုင်သနည်း?',
+    correctAnswer: 'b',
+    explanation: 'အဖြေမှန်က Programming ဖြစ်ပါတယ်။',
+    options: [
+      { id: 'a', label: 'Baking' },
+      { id: 'b', label: 'Programming' },
+      { id: 'c', label: 'Agriculture' },
+      { id: 'd', label: 'Architecture' },
+      ],
+  },
+  {
+    id: 'tum-minor',
+    text: 'Engineering အတွက်လိုအပ်၍ minor အဖြစ်သင်ကြားရသော ဘာသာရပ်ကိုဖြေပါ။',
+    correctAnswer: 'c',
+    explanation: 'အဖြေမှန်က Engineering Mathematics ဖြစ်ပါတယ်။',
+    options: [
+      { id: 'a', label: 'Engineering Eco' },
+      { id: 'b', label: 'Engineering Psychology' },
+      { id: 'c', label: 'Engineering Mathematics' },
+      { id: 'd', label: 'Engineering Bio' },
+      ],
+  },
+  {
+    id: 'drawing-size',
+    text: 'Engineering Drawing တွင်အသုံးပြုသော စာရွက် size ကိုဖြေပါ။',
+    correctAnswer: 'a',
+    explanation: 'အဖြေမှန်က A1 ဖြစ်ပါတယ်။',
+    options: [
+      { id: 'a', label: 'A1' },
+      { id: 'b', label: 'A2' },
+      { id: 'c', label: 'A3' },
+      { id: 'd', label: 'A4' },
+      ],
+  },
+  {
+    id: 'drawing-ruler',
+    text: 'Engineering Drawing တွင်အသုံးပြုသော ပေတံအမည်ကိုဖြေပါ။',
+    correctAnswer: 'c',
+    explanation: 'အဖြေမှန်က Computer Engineering and Information Technology ဖြစ်ပါတယ်။',
+    options: [
+      { id: 'a', label: 'Bပေတံ' },
+      { id: 'b', label: 'Vပေတံ' },
+      { id: 'c', label: 'Tပေတံ' },
+      { id: 'd', label: 'Cပေတံ' },
+      ],
+  },
+  {
+    id: 'tum-rollCall',
+    text: 'TU ကျောင်းသားတစ်ယောက်အတွက် စာမေးပွဲဖြေရန် လိုအပ်သောကျောင်းခေါ်ချိန်ရာခိုင်နှုန်းမှာ မည်မျှဖြစ်သနည်း။',
+    correctAnswer: 'b',
+    explanation: 'အဖြေမှန်က 75% ဖြစ်ပါတယ်။',
+    options: [
+      { id: 'a', label: '70%' },
+      { id: 'b', label: '75%' },
+      { id: 'c', label: '80%' },
+      { id: 'd', label: '85%' },
+      ],
   },
 ];
 
@@ -82,7 +178,7 @@ const GuestWelcome = () => {
           const correct = answer === question.correctAnswer;
           return (
             <article className={`guest-question ${answer ? 'is-answered' : ''}`} key={question.id}>
-              <div className="guest-question-head"><span>{answer ? <Check size={16} /> : questionIndex + 1}</span><div><small>Multiple choice</small><em>5 points</em></div></div>
+              <div className="guest-question-head"><span>{answer ? <Check size={16} /> : questionIndex + 1}</span><div><small>Multiple choice</small><em>1 points</em></div></div>
               <h3>{question.text}</h3>
               <div className="guest-options">
                 {question.options.map((option, optionIndex) => {

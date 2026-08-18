@@ -193,11 +193,7 @@ const SubmissionList = () => {
   };
 
   const handleGradeSubmission = (submission) => {
-    if (submission.submissionType === 'file') {
-      navigate(`/teacher/submission/grade/file/${submission._id}`);
-    } else if (submission.submissionType === 'paper') {
-      navigate(`/teacher/grade/paper/${submission._id}`);
-    }
+    navigate(`/teacher/submission/grade/${submission._id}`);
   };
 
   const filteredSubmissions = submissions.filter(submission => {
@@ -403,12 +399,12 @@ const SubmissionList = () => {
                 </div>
 
                 <div className="card-footer">
-                  <button className="btn-outline" onClick={() => handleViewDetails(submission)}>
+                  <button type="button" className="btn-outline" onClick={() => handleViewDetails(submission)}>
                     <i className="fas fa-eye"></i>
                     View Details
                   </button>
                   {submission.status !== 'graded' && (
-                    <button className="btn-primary" onClick={() => handleGradeSubmission(submission)}>
+                    <button type="button" className="btn-primary" onClick={() => handleGradeSubmission(submission)}>
                       <i className="fas fa-edit"></i>
                       Grade
                     </button>

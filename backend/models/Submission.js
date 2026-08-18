@@ -30,7 +30,7 @@ const StudentSubmissionSchema = mongoose.Schema({
             fileSize : Number
         }
     ],
-    
+
     // For ONLINE submission
     onlineSubmission: {
         answers: [{

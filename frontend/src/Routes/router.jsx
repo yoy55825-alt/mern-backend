@@ -174,6 +174,10 @@ const Router = () => {
               element: <SubmissionList />
             },
             {
+              path: 'submission/grade/:submissionId',
+              element: <GradeSubmission />
+            },
+            {
               path: 'submission/grade/file/:submissionId',
               element: <GradeSubmission />
             },

@@ -117,6 +117,18 @@ const GradeFileSubmission = () => {
     return ((gradeData.score / gradeData.maxScore) * 100).toFixed(1);
   };
 
+  const submissionTypeLabel = {
+    file: 'File upload',
+    online: 'Online answers',
+    paper: 'Paper submission'
+  }[submission?.submissionType] || 'Submission';
+
+  const formatAnswer = (answer) => {
+    if (Array.isArray(answer)) return answer.join(', ');
+    if (typeof answer === 'boolean') return answer ? 'True' : 'False';
+    return answer || 'No answer provided';
+  };
+
   if (loading) {
     return (
       <div className="grade-page">
@@ -164,18 +176,20 @@ const GradeFileSubmission = () => {
       <div className="grade-container">
         {/* Header */}
         <div className="grade-header">
-          <button onClick={() => navigate(-1)} className="back-button">
+          <button type="button" onClick={() => navigate(-1)} className="back-button" aria-label="Back to submissions">
             <i className="fas fa-arrow-left"></i>
-            Back
+            Submissions
           </button>
-          <h1>Grade File Submission</h1>
+          <div className="grade-heading-copy">
+            <span className="grade-eyebrow">Teacher workspace</span>
+            <h1>Review &amp; grade</h1>
+            <p>{assignment?.title || submission?.assignmentId?.title || 'Student submission'}</p>
+          </div>
           <div className="header-actions">
-            {submission?.status === 'graded' && (
-              <span className="graded-badge">
-                <i className="fas fa-check-circle"></i>
-                Already Graded
-              </span>
-            )}
+            <span className={`graded-badge ${submission?.status !== 'graded' ? 'pending' : ''}`}>
+              <i className={`fas ${submission?.status === 'graded' ? 'fa-check-circle' : 'fa-clock'}`}></i>
+              {submission?.status === 'graded' ? 'Graded' : 'Awaiting grade'}
+            </span>
           </div>
         </div>
 
@@ -189,12 +203,12 @@ const GradeFileSubmission = () => {
             </h2>
             <div className="info-grid">
               <div className="info-item">
-                <label>Student ID</label>
-                <p>{submission?.studentId}</p>
+                <label>Student name</label>
+                <p>{submission?.studentId?.name || 'Unknown student'}</p>
               </div>
               <div className="info-item">
                 <label>Assignment title</label>
-                <p>{submission?.assignmentId.title}</p>
+                <p>{submission?.assignmentId?.title || assignment?.title}</p>
               </div>
               <div className="info-item">
                 <label>Submitted At</label>
@@ -202,9 +216,9 @@ const GradeFileSubmission = () => {
               </div>
               <div className="info-item">
                 <label>Submission Type</label>
-                <p className="type-badge file">
-                  <i className="fas fa-file-upload"></i>
-                  File Upload
+                <p className={`type-badge ${submission?.submissionType}`}>
+                  <i className={`fas ${submission?.submissionType === 'online' ? 'fa-laptop-code' : submission?.submissionType === 'paper' ? 'fa-file-alt' : 'fa-file-upload'}`}></i>
+                  {submissionTypeLabel}
                 </p>
               </div>
               <div className="info-item">
@@ -251,7 +265,7 @@ const GradeFileSubmission = () => {
           )}
 
           {/* File Preview Card */}
-          <div className="info-card">
+          {submission?.submissionType === 'file' && <div className="info-card">
             <h2>
               <i className="fas fa-paperclip"></i>
               Submitted Files
@@ -287,7 +301,28 @@ const GradeFileSubmission = () => {
                 <p>No files attached to this submission</p>
               </div>
             )}
-          </div>
+          </div>}
+
+          {submission?.submissionType === 'online' && (
+            <div className="info-card answers-card">
+              <h2><i className="fas fa-list-check"></i>Student answers</h2>
+              <div className="answers-list">
+                {(submission.onlineSubmission?.answers || []).map((answer, index) => {
+                  const question = assignment?.questions?.find(item => String(item._id) === String(answer.questionId));
+                  return (
+                    <div className="answer-item" key={answer.questionId || index}>
+                      <span className="answer-number">{index + 1}</span>
+                      <div className="answer-copy">
+                        <strong>{question?.questionText || `Question ${index + 1}`}</strong>
+                        <p>{formatAnswer(answer.answer)}</p>
+                      </div>
+                      <span className={`answer-score ${answer.isCorrect ? 'correct' : ''}`}>{answer.pointsEarned || 0} pts</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
 
           {/* Grading Card */}
           <div className="grading-card">

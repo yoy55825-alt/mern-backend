@@ -6,7 +6,6 @@ import './FileSubmit.css';
 
 const FileUpload = () => {
     const { assignmentId } = useParams();
-    console.log(assignmentId);
     const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
     const navigate = useNavigate();
     const { user } = useContext(UserContext);
@@ -32,9 +31,6 @@ const FileUpload = () => {
             setLoading(true);
             const response = await axios.get(`${API_URL}/api/student/assignment/detail/${assignmentId}`);
             setAssignment(response?.data.data || []);
-            console.log(response);
-
-
             setError('');
         } catch (err) {
             console.error('Error fetching assignment:', err);
@@ -121,9 +117,6 @@ const FileUpload = () => {
             setError('Please select a file to upload');
             return;
         }
-        console.log(file);
-        
-
         setSubmitting(true);
         setError('');
         setSuccess('');
@@ -208,8 +201,6 @@ const FileUpload = () => {
             </div>
         );
     }
-    console.log(assignment);
-
     const isDeadlinePassed = assignment && new Date(assignment.deadLine) < new Date();
     const daysLeft = assignment ? getDaysLeft(assignment.deadLine) : 0;
 
@@ -218,10 +209,12 @@ const FileUpload = () => {
             <div className="upload-wrapper">
                 {/* Header */}
                 <div className="upload-header">
-                    <button onClick={() => navigate('/student/assignmentList')} className="back-btn">
+                    <button type="button" onClick={() => navigate('/student/assignmentList')} className="back-btn">
                         <i className="fas fa-arrow-left"></i> Back to Assignments
                     </button>
-                    <h1>File Submission</h1>
+                    <span className="upload-eyebrow">Student workspace</span>
+                    <h1>Submit your work</h1>
+                    <p>Review the assignment details, attach your final file, and submit when you are ready.</p>
                 </div>
 
                 {/* Assignment Info Card */}
@@ -234,7 +227,10 @@ const FileUpload = () => {
                             </span>
                         </div>
 
-                        <p className="description">{assignment.description}</p>
+                        <div className="assignment-description">
+                            <span><i className="fas fa-align-left"></i> Assignment instructions</span>
+                            <p>{assignment.description || 'No additional instructions were provided by the teacher.'}</p>
+                        </div>
 
                         <div className="info-grid">
                             <div className="info-item">
@@ -294,6 +290,14 @@ const FileUpload = () => {
                 {/* Upload Form */}
                 {assignment && assignment.status === 'active' && !isDeadlinePassed ? (
                     <form onSubmit={handleSubmit} className="upload-form">
+                        <div className="upload-form-header">
+                            <div>
+                                <span className="step-label">Final step</span>
+                                <h2>Upload assignment file</h2>
+                                <p>Choose one supported file up to 10 MB.</p>
+                            </div>
+                            <span className="secure-note"><i className="fas fa-shield-alt"></i> Secure upload</span>
+                        </div>
                         <div
                             className={`drop-zone ${dragActive ? 'drag-active' : ''} ${file ? 'file-selected' : ''}`}
                             onDragEnter={handleDrag}
@@ -301,6 +305,15 @@ const FileUpload = () => {
                             onDragOver={handleDrag}
                             onDrop={handleDrop}
                             onClick={() => document.getElementById('file-upload').click()}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter' || e.key === ' ') {
+                                    e.preventDefault();
+                                    document.getElementById('file-upload').click();
+                                }
+                            }}
+                            role="button"
+                            tabIndex="0"
+                            aria-label={file ? `Selected file: ${file.name}. Press Enter to replace it.` : 'Choose a file or drag and drop it here'}
                         >
                             <input
                                 id="file-upload"
@@ -312,8 +325,9 @@ const FileUpload = () => {
 
                             {file ? (
                                 <div className="file-preview">
-                                    <i className="fas fa-file-alt"></i>
+                                    <span className="file-icon"><i className="fas fa-file-alt"></i></span>
                                     <div className="file-info">
+                                        <span className="file-ready"><i className="fas fa-check"></i> Ready to submit</span>
                                         <p className="file-name">{file.name}</p>
                                         <p className="file-size">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
                                     </div>
@@ -332,14 +346,14 @@ const FileUpload = () => {
                             ) : (
                                 <>
                                     <i className="fas fa-cloud-upload-alt upload-icon"></i>
-                                    <p className="drag-text">Drag & drop your file here</p>
-                                    <p className="or-text">or</p>
+                                    <p className="drag-text">Drop your file here</p>
+                                    <p className="or-text">or choose it from your device</p>
                                     <button type="button" className="browse-btn">
-                                        Browse Files
+                                        <i className="fas fa-folder-open"></i> Browse files
                                     </button>
-                                    <p className="file-hint">
-                                        Supported formats: PDF, DOC, DOCX, JPEG, PNG (Max 10MB)
-                                    </p>
+                                    <div className="file-hints" aria-label="Upload requirements">
+                                        <span>PDF</span><span>DOC</span><span>DOCX</span><span>JPG</span><span>PNG</span><strong>Max 10 MB</strong>
+                                    </div>
                                 </>
                             )}
                         </div>
@@ -359,6 +373,7 @@ const FileUpload = () => {
                         )}
 
                         <div className="form-actions">
+                            <p><i className="fas fa-info-circle"></i> Double-check your file before submitting.</p>
                             <button
                                 type="button"
                                 onClick={() => navigate('/student/assignmentList')}

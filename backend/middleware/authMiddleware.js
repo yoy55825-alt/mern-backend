@@ -4,7 +4,7 @@ import User from '../models/Users.js';
 
 export const protect = async (req, res, next) => {
     let token;
-    
+
     console.log('=== AUTH DEBUG ===');
     console.log('Authorization header:', req.headers.authorization);
     console.log('Cookies:', req.cookies);
@@ -42,7 +42,7 @@ export const protect = async (req, res, next) => {
                 message: 'User not found'
             });
         }
-        
+
         console.log('User authenticated:', req.user.email);
         next();
         
